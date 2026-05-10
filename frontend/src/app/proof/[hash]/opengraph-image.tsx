@@ -180,7 +180,7 @@ export default async function OpengraphImage({ params }: Props) {
             borderRadius: "16px",
             padding: "20px 28px",
             border: "1px solid rgba(148, 163, 184, 0.25)",
-            width: "fit-content",
+            alignSelf: "flex-start",
           }}
         >
           {display}

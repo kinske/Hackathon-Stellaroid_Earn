@@ -32,6 +32,7 @@ The bootcamp/event submission is complete. Stellaroid Earn is now maintained as 
 - **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
 - **Maintenance checks:** [`MAINTENANCE.md`](MAINTENANCE.md)
 - **Custom domain cutover:** [`docs/STELLAROID_TECH_CUTOVER.md`](docs/STELLAROID_TECH_CUTOVER.md)
+- **Demo checklist:** [`docs/DEMO_CHECKLIST.md`](docs/DEMO_CHECKLIST.md)
 - **Canonical live URL:** [`stellaroid.tech`](https://stellaroid.tech/)
 - **Operational status route:** [`/status`](https://stellaroid.tech/status)
 
@@ -359,6 +360,8 @@ https://github.com/user-attachments/assets/stellaroid-earn-demo.mp4
 Local copy: [`demo/stellaroid-earn-demo.mp4`](demo/stellaroid-earn-demo.mp4)
 
 **Demo Day slides:** [`/slides`](https://stellaroid.tech/slides) (integrated into the app, arrow keys to navigate)
+
+**Submission/demo checklist:** [`docs/DEMO_CHECKLIST.md`](docs/DEMO_CHECKLIST.md)
 
 ---
 

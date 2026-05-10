@@ -15,4 +15,22 @@ test("proof pages expose a canonical Open Graph URL", async ({ page }) => {
     "content",
     SAMPLE_PROOF_URL,
   );
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    "content",
+    /\/proof\/c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3\/opengraph-image/,
+  );
+});
+
+test("proof Open Graph image renders as png", async ({ page, request }) => {
+  await page.goto(`/proof/${SAMPLE_PROOF_HASH}`);
+
+  const imageUrl = await page
+    .locator('meta[property="og:image"]')
+    .getAttribute("content");
+
+  expect(imageUrl).toBeTruthy();
+
+  const response = await request.get(imageUrl!);
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("image/png");
 });

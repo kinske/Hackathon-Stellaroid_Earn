@@ -19,26 +19,26 @@ npm run build
 npm run test:e2e
 ```
 
-Live fallback checks:
+Live canonical checks:
 
 ```powershell
-Invoke-WebRequest -Uri "https://stellaroid-earn-demo.vercel.app/" -Method Get -TimeoutSec 30
-# Include this after the `/status` route has been deployed.
-Invoke-WebRequest -Uri "https://stellaroid-earn-demo.vercel.app/status" -Method Get -TimeoutSec 30
-Invoke-WebRequest -Uri "https://stellaroid-earn-demo.vercel.app/api/health" -Method Get -TimeoutSec 30
-Invoke-WebRequest -Uri "https://stellaroid-earn-demo.vercel.app/sitemap.xml" -Method Get -TimeoutSec 30
+Invoke-WebRequest -Uri "https://stellaroid.tech/" -Method Get -TimeoutSec 30
+Invoke-WebRequest -Uri "https://stellaroid.tech/status" -Method Get -TimeoutSec 30
+Invoke-WebRequest -Uri "https://stellaroid.tech/api/health" -Method Get -TimeoutSec 30
+Invoke-WebRequest -Uri "https://stellaroid.tech/sitemap.xml" -Method Get -TimeoutSec 30
 ```
 
 Proof sample checks:
 
 ```powershell
-Invoke-WebRequest -Uri "https://stellaroid-earn-demo.vercel.app/proof/c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3" -Method Get -TimeoutSec 30
+Invoke-WebRequest -Uri "https://stellaroid.tech/proof/c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3" -Method Get -TimeoutSec 30
+Invoke-WebRequest -Uri "https://stellaroid.tech/proof/c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3/opengraph-image" -Method Get -TimeoutSec 30
 Invoke-WebRequest -Uri "https://stellar.expert/explorer/testnet/contract/CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET" -Method Get -TimeoutSec 30
 ```
 
 ## Domain Continuity Check
 
-Do not switch public docs to `stellaroid.tech` unless these checks pass:
+Public docs now use `https://stellaroid.tech` as the canonical live URL. Recheck DNS and redirects during monthly review or after registrar changes:
 
 ```powershell
 nslookup -type=NS stellaroid.tech 8.8.8.8
@@ -60,6 +60,8 @@ Invoke-WebRequest -Uri "https://earn.stellaroid.tech/" -Method Get -MaximumRedir
 
 Pass criteria are in `docs/STELLAROID_TECH_CUTOVER.md`.
 
+The Vercel fallback alias may still exist for recovery checks, but it should not be used as the public demo URL.
+
 ## Release Discipline
 
 - Run lint, build, E2E, and `git diff --check` before any checkpoint commit.
@@ -73,9 +75,9 @@ Pass criteria are in `docs/STELLAROID_TECH_CUTOVER.md`.
 
 Answer these in a short issue or note:
 
-- Is the fallback demo still live?
+- Is https://stellaroid.tech still live?
 - Is the verified proof page still readable without a wallet?
 - Are issuer pending/approved/locked states clear?
 - Can the employer flow still start from a proof page?
-- Is the custom domain ready, blocked, or intentionally deferred?
+- Do `www.stellaroid.tech` and `earn.stellaroid.tech` still redirect to the apex URL?
 - What is the next single feature that makes this more useful to a real issuer or employer?
