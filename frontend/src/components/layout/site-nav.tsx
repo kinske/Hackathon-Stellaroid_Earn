@@ -16,6 +16,7 @@ const navLinks = [
   { href: "/issuer", label: "Issuer" },
   { href: "/app", label: "App" },
   { href: "/employer", label: "Employer" },
+  { href: "/status", label: "Status" },
 ];
 
 export function SiteNav() {
@@ -23,6 +24,7 @@ export function SiteNav() {
   const pathname = usePathname();
 
   function isActive(href: string) {
+    if (!pathname) return false;
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   }

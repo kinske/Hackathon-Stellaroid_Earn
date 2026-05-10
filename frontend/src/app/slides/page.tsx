@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import Image from "next/image";
 
 /* ------------------------------------------------------------------ */
 /*  Metadata is exported from a separate file since this is "use client" */

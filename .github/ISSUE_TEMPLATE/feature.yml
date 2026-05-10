@@ -1,0 +1,38 @@
+name: Feature Request
+description: Propose a product improvement for keeping Stellaroid alive.
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Describe the smallest useful version.
+    validations:
+      required: true
+  - type: dropdown
+    id: user
+    attributes:
+      label: Primary user
+      options:
+        - Issuer
+        - Graduate
+        - Employer
+        - Admin
+        - Maintainer
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance checks
+      description: What commands, browser checks, or live URL checks prove it works?
+    validations:
+      required: true

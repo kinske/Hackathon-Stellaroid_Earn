@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowRight, Lock } from "lucide-react";
 import { Badge } from "@/components/ui";
 import { getProofMetadata } from "@/lib/proof-metadata";
@@ -53,13 +52,13 @@ export function ProofBlockPreview({ hash, certStatus }: ProofBlockPreviewProps) 
           <p className="text-sm text-text-muted leading-relaxed">
             Your on-chain credential — anyone can verify it, no login needed.
           </p>
-          <Link
+          <a
             href={`/proof/${hash}`}
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary no-underline hover:underline transition-colors"
           >
             View &amp; share your proof
             <ArrowRight width={14} height={14} aria-hidden="true" />
-          </Link>
+          </a>
         </>
       ) : (
         <>

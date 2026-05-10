@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { DEMO_AUTOFILL_EVENT, DemoAutofillDetail } from "@/components/demo/demo-autofill-button";
 import { Button, Input, useToast } from "@/components/ui";
 import { humanizeError } from "@/lib/errors";
@@ -60,6 +60,7 @@ async function extractPdfTitle(file: File): Promise<string | undefined> {
 export function RegisterForm({ onSuccess }: RegisterFormProps) {
   const { wallet } = useFreighterWallet();
   const { toast } = useToast();
+  const hashInputId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [studentAddr, setStudentAddr] = useState("");
@@ -252,7 +253,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
         />
 
         <div className="flex flex-col gap-1">
-          <label className="text-[13px] font-medium text-text-muted">
+          <label htmlFor={hashInputId} className="text-[13px] font-medium text-text-muted">
             Certificate hash (64 hex)
           </label>
           <div
@@ -292,6 +293,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             )}
 
             <textarea
+              id={hashInputId}
               rows={3}
               value={certHash}
               onChange={(e) => setCertHash(e.target.value)}
@@ -399,11 +401,22 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
                   value={metadataUri}
                   onChange={(e) => setMetadataUri(e.target.value)}
                   tooltip="Use this later for hosted JSON evidence or richer proof details"
+                  helper="Proof pages fetch this URL first, then fall back to the on-chain title and cohort."
                   placeholder="https://example.com/proofs/maria.json"
                   autoComplete="off"
                   spellCheck={false}
                   className="bg-black/20 border-white/8 shadow-[inset_0_2px_6px_rgba(0,0,0,0.3)]"
                 />
+                <div className="rounded-lg border border-border bg-surface-2/70 px-3 py-2 text-[12px] leading-relaxed text-text-muted">
+                  <p className="font-semibold text-text">Metadata source of truth</p>
+                  <p className="mt-1">
+                    Host a JSON proof file, paste its URL here, and keep the file stable. This demo
+                    does not upload or pin metadata yet.
+                  </p>
+                  <code className="mt-2 block break-all font-mono text-text-muted/80">
+                    {'{ "title": "...", "description": "...", "skills": ["..."], "evidence": [] }'}
+                  </code>
+                </div>
               </div>
             </div>
           </div>

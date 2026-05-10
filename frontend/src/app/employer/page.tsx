@@ -11,7 +11,18 @@ export const metadata: Metadata = {
     "Create and fund escrowed paid trials for verified candidates on Stellar testnet.",
 };
 
-export default function EmployerPage() {
+interface EmployerPageProps {
+  searchParams?: Promise<{
+    hash?: string;
+    candidate?: string;
+  }>;
+}
+
+export default async function EmployerPage({ searchParams }: EmployerPageProps) {
+  const params = await searchParams;
+  const initialHash = params?.hash ?? "";
+  const initialCandidate = params?.candidate ?? "";
+
   return (
     <FreighterWalletProvider>
       <AppShell
@@ -31,7 +42,10 @@ export default function EmployerPage() {
               Funds are locked until you approve the candidate&apos;s milestones and release payment.
             </p>
           </section>
-          <EmployerOpportunityForm />
+          <EmployerOpportunityForm
+            initialHash={initialHash}
+            initialCandidate={initialCandidate}
+          />
         </div>
       </AppShell>
     </FreighterWalletProvider>

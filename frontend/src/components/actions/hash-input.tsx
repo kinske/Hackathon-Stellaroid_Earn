@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 
 function isValidHash(hash: string): boolean {
   return /^[0-9a-fA-F]{64}$/.test(hash.trim().replace(/^0x/i, ""));
@@ -16,6 +16,7 @@ interface HashInputProps {
 }
 
 export function HashInput({ value, onChange, onBlur, error, helper, touched }: HashInputProps) {
+  const inputId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [hashing, setHashing] = useState(false);
@@ -56,7 +57,7 @@ export function HashInput({ value, onChange, onBlur, error, helper, touched }: H
 
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-[13px] font-medium text-text-muted">
+      <label htmlFor={inputId} className="text-[13px] font-medium text-text-muted">
         Certificate hash (64 hex)
       </label>
       <div
@@ -94,6 +95,7 @@ export function HashInput({ value, onChange, onBlur, error, helper, touched }: H
         )}
 
         <textarea
+          id={inputId}
           rows={3}
           value={value}
           onChange={(e) => onChange(e.target.value)}

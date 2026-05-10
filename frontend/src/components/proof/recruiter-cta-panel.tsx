@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { appConfig } from "@/lib/config";
 import { CopyButton } from "@/components/ui/copy-button";
 
 interface RecruiterCtaPanelProps {
@@ -10,6 +11,12 @@ interface RecruiterCtaPanelProps {
 
 export function RecruiterCtaPanel({ hash, candidateAddress }: RecruiterCtaPanelProps) {
   const proofUrl = `https://stellaroid-earn-demo.vercel.app/proof/${hash}`;
+  const employerHref = candidateAddress
+    ? `/employer?hash=${encodeURIComponent(hash)}&candidate=${encodeURIComponent(candidateAddress)}`
+    : `/employer?hash=${encodeURIComponent(hash)}`;
+  const contractEventsHref = appConfig.contractId
+    ? `${appConfig.explorerUrl}/contract/${appConfig.contractId}#events`
+    : null;
 
   return (
     <section
@@ -19,9 +26,13 @@ export function RecruiterCtaPanel({ hash, candidateAddress }: RecruiterCtaPanelP
       <span className="font-pixel text-xs font-medium text-primary uppercase tracking-wider">
         Recruiter actions
       </span>
+      <p className="m-0 text-sm leading-relaxed text-text-muted">
+        Start a paid trial from this verified credential. The employer form will
+        carry over the certificate hash and candidate wallet.
+      </p>
       <div className="flex gap-3 flex-wrap">
         <Link
-          href="/employer"
+          href={employerHref}
           className="inline-flex items-center px-4 py-2 rounded-md bg-primary text-on-primary font-semibold text-sm no-underline hover:bg-primary-hover transition-colors"
         >
           Fund paid trial
@@ -35,6 +46,16 @@ export function RecruiterCtaPanel({ hash, candidateAddress }: RecruiterCtaPanelP
         >
           View candidate passport →
         </Link>
+      ) : null}
+      {contractEventsHref ? (
+        <a
+          href={contractEventsHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[0.8125rem] text-accent no-underline hover:underline"
+        >
+          Review on-chain events →
+        </a>
       ) : null}
     </section>
   );

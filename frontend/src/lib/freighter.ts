@@ -14,7 +14,7 @@ import type { WalletSnapshot } from "@/lib/types";
 const FREIGHTER_TIMEOUT_MS = 5_000;
 
 const E2E_WALLET_ADDRESS =
-  "GAWIOVGF3N7G3K4J4Y6MGSQYPN4K53Q3VHWL5V66B5Y4BBJH3M6AJYLD";
+  "GAWIOVGFSPJDEIJJZUSVRFPVP3D5VNO2LGCU47KEHJD6MV277QKNR34D";
 
 function buildUnsupportedWallet(error?: string): WalletSnapshot {
   return {

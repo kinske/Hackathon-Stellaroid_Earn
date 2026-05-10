@@ -30,6 +30,12 @@ const BASE_CSP_DIRECTIVES = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Keep local Windows builds deterministic; parallel static workers have
+    // intermittently raced while writing .next trace/manifests in this repo.
+    cpus: 1,
+  },
+
   // Prevent webpack from bundling native Node.js modules pulled in by
   // @stellar/stellar-sdk → @stellar/stellar-base → sodium-native.
   // Webpack can't statically analyse sodium-native's dynamic require() calls

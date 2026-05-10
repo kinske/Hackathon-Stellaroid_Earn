@@ -3,42 +3,54 @@ import { expect, test } from "@playwright/test";
 test("register, verify, pay, and open the proof page", async ({ page }) => {
   await page.goto("/app");
 
+  await page.getByRole("button", { name: "Let’s go" }).click();
+
   await expect(
-    page.getByRole("button", { name: "Connect Freighter" }),
+    page.getByRole("button", { name: "Connect Freighter", exact: true }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Connect Freighter" }).click();
+  await page.getByRole("button", { name: "Connect Freighter", exact: true }).click();
 
-  await expect(page.getByText("GAWIO…AJYLD")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy wallet address" })).toBeVisible();
+  await expect(page.getByText("GAWI •••• •••• R34D")).toBeVisible();
 
-  await page.getByRole("button", { name: "Autofill demo inputs" }).click();
+  await page.getByRole("button", { name: "Autofill form inputs" }).click();
 
   const studentWalletInput = page.getByLabel("Student wallet (G...)").first();
-  const hashInput = page.getByLabel("Certificate hash (64 hex)");
+  const hashInput = page.getByLabel("Certificate hash (64 hex)").first();
+  await expect(studentWalletInput).toHaveValue(/^G[A-Z0-9]{55}$/);
+  await expect(hashInput).toHaveValue(/^[0-9a-f]{64}$/);
   const studentWallet = (await studentWalletInput.inputValue()).trim();
   const certHash = (await hashInput.inputValue()).trim();
 
   await page.getByRole("button", { name: "Register Certificate" }).click();
   await expect(page.getByText("Certificate registered")).toBeVisible();
 
-  await page.getByRole("radio", { name: /Employer/i }).click();
+  await page.getByRole("button", { name: "Look up" }).click();
   await expect(
-    page.getByRole("button", { name: "Mark Verified (on-chain)" }),
+    page.getByRole("button", { name: "Approve credential" }),
   ).toBeEnabled();
 
-  await page.getByRole("button", { name: "Mark Verified (on-chain)" }).click();
-  await expect(page.getByText("Certificate verified")).toBeVisible();
-  await expect(page.getByText("Verified")).toBeVisible();
+  await page.getByRole("button", { name: "Approve credential" }).click();
+  await expect(page.getByText("Credential approved")).toBeVisible();
+  await expect(page.getByText(/already verified on-chain/i)).toBeVisible();
 
+  await page.getByRole("radio", { name: /Employer/i }).click();
+  await page.getByLabel("Amount (XLM)").fill("10");
   await expect(page.getByRole("button", { name: "Pay Student" })).toBeEnabled();
   await page.getByRole("button", { name: "Pay Student" }).click();
   await expect(page.getByText("Payment settled")).toBeVisible();
 
-  const proofLink = page.getByRole("link", { name: "Open public Verified Badge" });
+  const proofLink = page.getByRole("link", { name: "View & share your proof" });
   await expect(proofLink).toHaveAttribute("href", `/proof/${certHash}`);
   await proofLink.click();
 
   await expect(page).toHaveURL(`/proof/${certHash}`);
-  await expect(page.getByRole("heading", { name: /On-chain credential/i })).toBeVisible();
-  await expect(page.getByText("Yes")).toBeVisible();
-  await expect(page.getByText(studentWallet.slice(0, 5))).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Stellar Smart Contract Bootcamp Completion" }),
+  ).toBeVisible();
+  await expect(page.getByText(/verified on-chain/i)).toBeVisible();
+  await expect(page.getByRole("link", { name: "Fund paid trial" })).toHaveAttribute(
+    "href",
+    new RegExp(`candidate=${studentWallet}`),
+  );
 });

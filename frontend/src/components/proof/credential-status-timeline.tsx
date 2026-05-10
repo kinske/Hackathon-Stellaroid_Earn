@@ -26,6 +26,23 @@ function formatTimestamp(ts: number): string {
   }
 }
 
+function statusExplanation(status: CertificateStatus): string {
+  switch (status) {
+    case "verified":
+      return "Verified means the approved issuer or admin has trusted this credential on-chain.";
+    case "revoked":
+      return "Revoked means the credential remains visible for auditability, but should not be used for payment or hiring decisions.";
+    case "suspended":
+      return "Suspended means the credential is temporarily paused by the issuer or admin.";
+    case "expired":
+      return "Expired means the credential is past its validity window.";
+    case "issued":
+    case "unknown":
+    default:
+      return "Issued means the credential is registered on-chain. Verified is the final trusted state.";
+  }
+}
+
 export function CredentialStatusTimeline({
   status,
   issuedAt,
@@ -57,6 +74,9 @@ export function CredentialStatusTimeline({
       <span className="font-pixel text-xs font-medium text-text-muted uppercase tracking-wider mb-2">
         Status timeline
       </span>
+      <p className="mb-3 text-xs leading-relaxed text-text-muted">
+        {statusExplanation(status)}
+      </p>
       <ol className="flex flex-col gap-0 relative ml-2">
         {events.map((event, i) => (
           <li key={event.label} className="flex items-start gap-3 pb-3 last:pb-0">

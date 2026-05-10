@@ -13,7 +13,7 @@ import { appConfig } from "@/lib/config";
 import { humanizeError } from "@/lib/errors";
 import { withTimeout } from "@/lib/with-timeout";
 import { getAllIssuers } from "@/lib/issuer-registry";
-import { ExternalLink, Loader2 } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import type { IssuerRecord } from "@/lib/types";
 
 const knownIssuers = getAllIssuers();
@@ -28,6 +28,64 @@ function statusTone(status: IssuerRecord["status"]): "success" | "warning" | "da
     default:
       return "warning";
   }
+}
+
+type FlowTone = "success" | "warning" | "danger" | "neutral";
+
+function flowToneClasses(tone: FlowTone): string {
+  switch (tone) {
+    case "success":
+      return "border-success/30 bg-success/10 text-success";
+    case "warning":
+      return "border-warning/30 bg-warning/10 text-warning";
+    case "danger":
+      return "border-danger/30 bg-danger/10 text-danger";
+    case "neutral":
+    default:
+      return "border-border bg-bg text-text-muted";
+  }
+}
+
+function getIssuerFlowSteps(issuer: IssuerRecord | null) {
+  const approved = issuer?.status === "approved";
+  const pending = issuer?.status === "pending";
+  const suspended = issuer?.status === "suspended";
+
+  return [
+    {
+      label: "1. Register",
+      state: issuer ? "Complete" : "Needed",
+      detail: issuer
+        ? "This wallet has an on-chain issuer profile."
+        : "Submit a profile from the wallet that will issue credentials.",
+      tone: issuer ? "success" : "warning",
+    },
+    {
+      label: "2. Admin approval",
+      state: approved ? "Approved" : suspended ? "Suspended" : pending ? "Pending" : "Blocked",
+      detail: approved
+        ? "Admin approved this issuer. It can now issue and verify credentials."
+        : suspended
+          ? "Admin suspended this issuer. It cannot issue or verify credentials."
+          : pending
+            ? "Profile exists, but issuing is blocked until the admin approves it."
+            : "Approval cannot start until a profile exists.",
+      tone: approved ? "success" : suspended ? "danger" : pending ? "warning" : "neutral",
+    },
+    {
+      label: "3. Can issue",
+      state: approved ? "Ready" : "Locked",
+      detail: approved
+        ? "Open the app flow to register a credential under this approved issuer."
+        : "The app flow will reject certificate writes until approval is complete.",
+      tone: approved ? "success" : "neutral",
+    },
+  ] satisfies Array<{
+    label: string;
+    state: string;
+    detail: string;
+    tone: FlowTone;
+  }>;
 }
 
 export function IssuerDashboard() {
@@ -51,6 +109,8 @@ export function IssuerDashboard() {
     !!wallet.address &&
     !!configuredAdmin &&
     wallet.address.trim().toUpperCase() === configuredAdmin;
+  const issuerFlowSteps = getIssuerFlowSteps(issuer);
+  const canIssue = issuer?.status === "approved";
 
   useEffect(() => {
     let cancelled = false;
@@ -255,8 +315,8 @@ export function IssuerDashboard() {
                     <Button variant="primary" href="/issuer/register">
                       Register now
                     </Button>
-                    <Button variant="secondary" href="/app">
-                      Open app
+                    <Button variant="ghost" disabled>
+                      App writes locked
                     </Button>
                   </div>
                 </div>
@@ -267,21 +327,57 @@ export function IssuerDashboard() {
           <aside className="rounded-2xl border border-border bg-surface p-6">
             <h2 className="text-xl font-semibold text-text">Next actions</h2>
             <div className="mt-4 flex flex-col gap-3">
-              {issuer && (
+              {!issuer ? (
                 <Button variant="primary" className="w-full" href="/issuer/register">
                   Register issuer profile
                 </Button>
+              ) : canIssue ? (
+                <Button variant="primary" className="w-full" href="/app">
+                  Issue credential
+                </Button>
+              ) : (
+                <Button variant="secondary" className="w-full" href="/issuer/register">
+                  Review issuer profile
+                </Button>
               )}
-              <Button variant="secondary" className="w-full" href="/app">
-                Open app flow
-              </Button>
+              {canIssue ? (
+                <Button variant="secondary" className="w-full" href="/app">
+                  Open app flow
+                </Button>
+              ) : (
+                <Button variant="ghost" className="w-full" disabled>
+                  App writes locked until approval
+                </Button>
+              )}
             </div>
-            <ol className="mt-5 space-y-2 text-sm text-text-muted list-decimal list-inside">
-              <li>Register your issuer profile on-chain.</li>
-              <li>Get approval from the admin wallet.</li>
-              <li>Issue and verify credentials.</li>
-              <li>Accept payments for verified work.</li>
-            </ol>
+            <div className="mt-5 rounded-xl border border-border bg-bg/60 p-4">
+              <p className="text-xs uppercase tracking-[0.14em] text-text-muted/70">
+                Demo handoff
+              </p>
+              <p className="mt-2 text-sm font-semibold text-text">
+                Pending -&gt; Approved -&gt; Can issue
+              </p>
+              <p className="mt-1 text-sm text-text-muted">
+                This is the judge-facing path: a profile can exist without permission, but only an
+                approved issuer can publish trusted credentials.
+              </p>
+            </div>
+            <div className="mt-4 flex flex-col gap-3">
+              {issuerFlowSteps.map((step) => (
+                <div
+                  key={step.label}
+                  className={`rounded-xl border px-4 py-3 ${flowToneClasses(step.tone)}`}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-sm font-semibold text-text">{step.label}</span>
+                    <span className="text-xs font-semibold uppercase tracking-[0.12em]">
+                      {step.state}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm text-text-muted">{step.detail}</p>
+                </div>
+              ))}
+            </div>
           </aside>
         </section>
 

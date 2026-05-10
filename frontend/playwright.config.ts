@@ -3,7 +3,7 @@ import { defineConfig, devices } from "@playwright/test";
 const PORT = 3007;
 const baseURL = `http://127.0.0.1:${PORT}`;
 const E2E_READ_ADDRESS =
-  "GAWIOVGF3N7G3K4J4Y6MGSQYPN4K53Q3VHWL5V66B5Y4BBJH3M6AJYLD";
+  "GAWIOVGFSPJDEIJJZUSVRFPVP3D5VNO2LGCU47KEHJD6MV277QKNR34D";
 
 export default defineConfig({
   testDir: "./e2e",

@@ -1,0 +1,39 @@
+name: Bug Report
+description: Report a verified app, proof, wallet, contract, or deployment bug.
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed behavior
+      description: What happened? Include exact route, button, command, or error text.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Paste non-secret logs, screenshots, command output, or URLs.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Frontend
+        - Proof page
+        - Wallet/Freighter
+        - Contract/testnet
+        - Vercel/domain
+        - Docs
+    validations:
+      required: true

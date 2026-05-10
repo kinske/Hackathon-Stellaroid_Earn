@@ -23,6 +23,8 @@ import type {
 
 const FALLBACK_SIMULATION_SOURCE =
   "GBAKLRUJEOZGWKSHJFFWJ4DINXQZEJBT7JQTR5T4GATQU2SNO4ZFHZQ4";
+const E2E_WALLET_ADDRESS =
+  "GAWIOVGFSPJDEIJJZUSVRFPVP3D5VNO2LGCU47KEHJD6MV277QKNR34D";
 
 export type CertificateRecord = {
   owner: string;
@@ -202,6 +204,20 @@ function buildSimulationTransaction(
 }
 
 export async function getCertificateServer(certHashHex: string) {
+  if (appConfig.e2eMode) {
+    return normalizeCertificate({
+      owner: E2E_WALLET_ADDRESS,
+      issuer: E2E_WALLET_ADDRESS,
+      title: "Stellar Smart Contract Bootcamp Completion",
+      cohort: "Stellar PH Bootcamp 2026",
+      metadata_uri: "",
+      status: "Verified",
+      issued_at: 0,
+      verified_at: Date.now(),
+      expires_at: 0,
+    });
+  }
+
   ensureConfigured();
   const server = getServer();
   const transaction = buildSimulationTransaction(

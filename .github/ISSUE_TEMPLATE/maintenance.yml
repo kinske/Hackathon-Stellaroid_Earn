@@ -1,0 +1,22 @@
+name: Maintenance Check
+description: Track recurring demo, proof, DNS, and project-health checks.
+title: "chore: maintenance check "
+labels: ["maintenance"]
+body:
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: `npm run lint` passes in `frontend/`
+        - label: `npm run build` passes in `frontend/`
+        - label: `npm run test:e2e` passes in `frontend/`
+        - label: fallback demo URL returns 200
+        - label: sample proof page returns 200
+        - label: contract explorer page is reachable
+        - label: `stellaroid.tech` DNS status recorded
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes and blockers
+      description: Include exact command output or external blockers. Do not include secrets.

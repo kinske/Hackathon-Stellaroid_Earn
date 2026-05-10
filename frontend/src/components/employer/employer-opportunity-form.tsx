@@ -15,11 +15,19 @@ import { humanizeError } from "@/lib/errors";
 import { withTimeout } from "@/lib/with-timeout";
 import { ExternalLink } from "lucide-react";
 
-export function EmployerOpportunityForm() {
+interface EmployerOpportunityFormProps {
+  initialHash?: string;
+  initialCandidate?: string;
+}
+
+export function EmployerOpportunityForm({
+  initialHash = "",
+  initialCandidate = "",
+}: EmployerOpportunityFormProps) {
   const { wallet } = useFreighterWallet();
   const { toast } = useToast();
 
-  const [certHash, setCertHash] = useState("");
+  const [certHash, setCertHash] = useState(initialHash);
   const [cert, setCert] = useState<CertificateRecord | null>(null);
   const [lookupBusy, setLookupBusy] = useState(false);
   const [title, setTitle] = useState("");
@@ -27,6 +35,7 @@ export function EmployerOpportunityForm() {
   const [milestones, setMilestones] = useState("1");
   const [submitting, setSubmitting] = useState(false);
   const [createdOppId, setCreatedOppId] = useState<number | null>(null);
+  const [opportunityFunded, setOpportunityFunded] = useState(false);
   const [funding, setFunding] = useState(false);
 
   const walletConnected =
@@ -73,6 +82,7 @@ export function EmployerOpportunityForm() {
       const oppId = result?.result as number | undefined;
       if (oppId !== undefined) {
         setCreatedOppId(oppId);
+        setOpportunityFunded(false);
       }
       toast({
         title: "Opportunity created",
@@ -113,6 +123,7 @@ export function EmployerOpportunityForm() {
             }
           : undefined,
       });
+      setOpportunityFunded(true);
     } catch (e) {
       const h = humanizeError(e);
       toast({ title: h.title, detail: h.detail, tone: "danger" });
@@ -142,6 +153,7 @@ export function EmployerOpportunityForm() {
               setCertHash(e.target.value);
               setCert(null);
               setCreatedOppId(null);
+              setOpportunityFunded(false);
             }}
             placeholder="64 hex characters"
             mono
@@ -173,6 +185,13 @@ export function EmployerOpportunityForm() {
             <span className="text-xs text-text-muted font-mono">
               Owner: {cert.owner}
             </span>
+          </div>
+        ) : initialCandidate ? (
+          <div className="rounded-xl border border-border bg-bg px-4 py-3 flex flex-col gap-1">
+            <span className="text-xs uppercase tracking-[0.14em] text-text-muted">
+              Candidate from proof link
+            </span>
+            <code className="text-xs text-text break-all">{initialCandidate}</code>
           </div>
         ) : null}
       </section>
@@ -214,11 +233,41 @@ export function EmployerOpportunityForm() {
                 variant="primary"
                 onClick={() => void handleFund()}
                 loading={funding}
+                disabled={opportunityFunded}
               >
-                Fund escrow
+                {opportunityFunded ? "Escrow funded" : "Fund escrow"}
               </Button>
             ) : null}
           </div>
+          {createdOppId !== null ? (
+            <div className="rounded-xl border border-success/30 bg-success/10 px-4 py-3">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div>
+                  <p className="text-sm font-semibold text-text">
+                    Opportunity #{createdOppId} is ready to track
+                  </p>
+                  <p className="mt-1 text-sm text-text-muted">
+                    Keep the flow moving from creation to funding to milestone review without
+                    losing the candidate context.
+                  </p>
+                </div>
+                <Badge tone={opportunityFunded ? "success" : "warning"} dot>
+                  {opportunityFunded ? "funded" : "draft"}
+                </Badge>
+              </div>
+              <div className="mt-3 flex gap-3 flex-wrap">
+                <Button variant="secondary" href={`/opportunity/${createdOppId}`}>
+                  Open opportunity
+                </Button>
+                <Button variant="ghost" href={`/talent/${cert.owner}`}>
+                  View candidate passport
+                </Button>
+                <Button variant="ghost" href={`/proof/${certHash.trim()}`}>
+                  Back to proof
+                </Button>
+              </div>
+            </div>
+          ) : null}
         </section>
       ) : null}
     </div>

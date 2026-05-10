@@ -30,6 +30,38 @@ import type {
 
 const FALLBACK_SIMULATION_SOURCE =
   "GBAKLRUJEOZGWKSHJFFWJ4DINXQZEJBT7JQTR5T4GATQU2SNO4ZFHZQ4";
+const E2E_WALLET_ADDRESS =
+  "GAWIOVGFSPJDEIJJZUSVRFPVP3D5VNO2LGCU47KEHJD6MV277QKNR34D";
+const e2eCertificates = new Map<string, Record<string, unknown>>();
+
+function normalizeHashKey(certHashHex: string) {
+  return certHashHex.trim().replace(/^0x/i, "").toLowerCase();
+}
+
+function buildE2ECertificate(
+  owner: string,
+  issuer: string,
+  certHashHex: string,
+  status: "Issued" | "Verified",
+  metadata?: {
+    title?: string;
+    cohort?: string;
+    metadataUri?: string;
+  },
+) {
+  const current = e2eCertificates.get(normalizeHashKey(certHashHex));
+  return {
+    owner,
+    issuer,
+    title: metadata?.title ?? normalizeString(current?.title),
+    cohort: metadata?.cohort ?? normalizeString(current?.cohort),
+    metadata_uri: metadata?.metadataUri ?? normalizeString(current?.metadata_uri),
+    status,
+    issued_at: normalizeTimestamp(current?.issued_at) || 0,
+    verified_at: status === "Verified" ? Date.now() : 0,
+    expires_at: 0,
+  };
+}
 
 function getServer() {
   return new rpc.Server(appConfig.rpcUrl, {
@@ -297,17 +329,6 @@ async function simulateRead<T>(
   args: xdr.ScVal[],
   transform: (value: unknown) => T,
 ) {
-  if (appConfig.e2eMode && method === "get_certificate") {
-    return transform({
-      owner: "GAWIOVGF3N7G3K4J4Y6MGSQYPN4K53Q3VHWL5V66B5Y4BBJH3M6AJYLD",
-      issuer: "GAWIOVGF3N7G3K4J4Y6MGSQYPN4K53Q3VHWL5V66B5Y4BBJH3M6AJYLD",
-      status: "Verified",
-      issued_at: 0,
-      verified_at: 0,
-      expires_at: 0,
-    });
-  }
-
   ensureConfigured();
   const server = getServer();
   const transaction = buildSimulationTransaction(sourceAddress, method, args);
@@ -759,6 +780,17 @@ export async function registerCertificate(
     metadataUri?: string;
   },
 ) {
+  if (appConfig.e2eMode) {
+    e2eCertificates.set(
+      normalizeHashKey(certHashHex),
+      buildE2ECertificate(student, issuer, certHashHex, "Issued", metadata),
+    );
+    return {
+      hash: `e2e-register-${issuer.slice(0, 6)}`,
+      result: undefined,
+    };
+  }
+
   return signAndSubmit(
     issuer,
     "register_certificate",
@@ -774,6 +806,29 @@ export async function registerCertificate(
 }
 
 export async function verifyCertificate(caller: string, certHashHex: string) {
+  if (appConfig.e2eMode) {
+    const key = normalizeHashKey(certHashHex);
+    const current = e2eCertificates.get(key);
+    e2eCertificates.set(
+      key,
+      buildE2ECertificate(
+        normalizeString(current?.owner) || E2E_WALLET_ADDRESS,
+        caller,
+        certHashHex,
+        "Verified",
+        {
+          title: normalizeString(current?.title),
+          cohort: normalizeString(current?.cohort),
+          metadataUri: normalizeString(current?.metadata_uri),
+        },
+      ),
+    );
+    return {
+      hash: `e2e-verify-${caller.slice(0, 6)}`,
+      result: undefined,
+    };
+  }
+
   return signAndSubmit(
     caller,
     "verify_certificate",
@@ -786,18 +841,7 @@ export async function verifyCertificate(caller: string, certHashHex: string) {
 
 export async function getCertificate(certHashHex: string) {
   if (appConfig.e2eMode) {
-    return {
-      owner: "GAWIOVGF3N7G3K4J4Y6MGSQYPN4K53Q3VHWL5V66B5Y4BBJH3M6AJYLD",
-      issuer: "GAWIOVGF3N7G3K4J4Y6MGSQYPN4K53Q3VHWL5V66B5Y4BBJH3M6AJYLD",
-      title: "Stellar Smart Contract Bootcamp Completion",
-      cohort: "Stellar PH Bootcamp 2026",
-      metadataUri: "",
-      status: "verified" as const,
-      issuedAt: 0,
-      verifiedAt: 0,
-      expiresAt: 0,
-      verified: true,
-    };
+    return normalizeCertificate(e2eCertificates.get(normalizeHashKey(certHashHex)) ?? null);
   }
 
   return simulateRead(

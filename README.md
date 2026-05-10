@@ -25,6 +25,20 @@ Issue, verify, and pay graduates on Stellar testnet  - Soroban + Freighter, end-
 
 ---
 
+## Project Status
+
+The bootcamp/event submission is complete. Stellaroid Earn is now maintained as a living Stellar credential proof project.
+
+- **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
+- **Maintenance checks:** [`MAINTENANCE.md`](MAINTENANCE.md)
+- **Custom domain cutover:** [`docs/STELLAROID_TECH_CUTOVER.md`](docs/STELLAROID_TECH_CUTOVER.md)
+- **Canonical live URL for now:** [`stellaroid-earn-demo.vercel.app`](https://stellaroid-earn-demo.vercel.app/)
+- **Operational status route:** `/status` after this branch is deployed.
+
+`stellaroid.tech` should not replace the demo URL until DNS and HTTP checks pass.
+
+---
+
 ## 30-Second Pitch
 
 **Problem**  - Bootcamp certificates are PDFs that anyone can fake and no one can independently verify. Employers skip verification or pay for a background check service.
