@@ -70,7 +70,7 @@ After collecting user feedback, the following improvements were implemented:
 
 ## How to Reproduce User Testing
 
-1. Share the live demo link: https://stellaroid-earn-demo.vercel.app/
+1. Share the live demo link: https://stellaroid.tech/
 2. Ask testers to install [Freighter](https://www.freighter.app/) and switch to Testnet
 3. Walk them through: connect wallet → view proof page → explore dashboard
 4. Have them fill out the Google Form

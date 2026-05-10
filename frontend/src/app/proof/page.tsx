@@ -33,13 +33,13 @@ export default async function ProofIndex() {
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "Look Up a Certificate",
-          url: "https://stellaroid-earn-demo.vercel.app/proof",
+          url: "https://stellaroid.tech/proof",
           description:
             "Paste a SHA-256 hash to view its on-chain record, issuer trust status, and any attached credential evidence.",
           isPartOf: {
             "@type": "WebApplication",
             name: "Stellaroid Earn",
-            url: "https://stellaroid-earn-demo.vercel.app",
+            url: "https://stellaroid.tech",
           },
         }}
       />
@@ -52,13 +52,13 @@ export default async function ProofIndex() {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: "https://stellaroid-earn-demo.vercel.app",
+              item: "https://stellaroid.tech",
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "Look Up a Certificate",
-              item: "https://stellaroid-earn-demo.vercel.app/proof",
+              item: "https://stellaroid.tech/proof",
             },
           ],
         }}

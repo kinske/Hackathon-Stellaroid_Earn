@@ -652,7 +652,7 @@ export default function SlidesPage() {
                 variant: "amber" as const,
                 stroke: "#f59e0b",
                 title: "Live Demo",
-                desc: "stellaroid-earn-demo.vercel.app",
+                desc: "stellaroid.tech",
                 icon: (
                   <>
                     <circle cx="12" cy="12" r="10" />

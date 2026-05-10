@@ -116,9 +116,9 @@ export default async function StatusPage() {
             <p className="m-0 font-pixel text-[11px] uppercase tracking-widest text-text-muted">
               Custom domain
             </p>
-            <h2 className="mt-2 text-xl text-text">Pending DNS</h2>
+            <h2 className="mt-2 text-xl text-text">Canonical URL</h2>
             <p className="mt-2 text-sm leading-relaxed text-text-muted">
-              `stellaroid.tech` remains blocked until registrar DNS resolves publicly.
+              `stellaroid.tech` is the canonical live URL. `www` and `earn` redirect here.
             </p>
             <a
               href={customDomainUrl}

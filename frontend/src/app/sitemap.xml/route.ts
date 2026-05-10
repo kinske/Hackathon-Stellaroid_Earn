@@ -1,4 +1,4 @@
-const BASE_URL = "https://stellaroid-earn-demo.vercel.app";
+const BASE_URL = "https://stellaroid.tech";
 
 const routes = [
   { path: "/", changeFrequency: "weekly", priority: 1 },

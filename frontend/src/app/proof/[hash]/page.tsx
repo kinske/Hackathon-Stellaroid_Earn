@@ -21,7 +21,7 @@ import { JsonLd } from "@/components/ui/json-ld";
 // 404 with no RPC call, protecting against hash-enumeration flooding.
 const HASH_RE = /^[0-9a-f]{64}$/i;
 
-const BASE_URL = "https://stellaroid-earn-demo.vercel.app";
+const BASE_URL = "https://stellaroid.tech";
 
 interface PageProps {
   params: Promise<{ hash: string }>;

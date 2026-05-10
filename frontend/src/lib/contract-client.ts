@@ -756,7 +756,7 @@ export async function getIssuer(issuer: string) {
     return {
       address: issuer,
       name: "Stellaroid Academy",
-      website: "https://stellaroid-earn-demo.vercel.app",
+      website: "https://stellaroid.tech",
       category: "bootcamp",
       status: "approved" as const,
     };

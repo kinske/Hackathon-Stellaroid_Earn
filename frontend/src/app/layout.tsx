@@ -36,7 +36,7 @@ const shareTechMono = Share_Tech_Mono({
   display: "swap",
 });
 
-const BASE_URL = "https://stellaroid-earn-demo.vercel.app";
+const BASE_URL = "https://stellaroid.tech";
 
 export const viewport: Viewport = {
   themeColor: "#f59e0b",

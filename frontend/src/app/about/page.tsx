@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-const BASE_URL = "https://stellaroid-earn-demo.vercel.app";
+const BASE_URL = "https://stellaroid.tech";
 
 const aboutBreadcrumbJsonLd = {
   "@context": "https://schema.org",

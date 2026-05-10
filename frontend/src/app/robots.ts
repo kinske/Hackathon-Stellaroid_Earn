@@ -11,6 +11,6 @@ export default function robots(): MetadataRoute.Robots {
       // expensive to render if a bot spiders them at scale.
       disallow: "/proof/",
     },
-    sitemap: "https://stellaroid-earn-demo.vercel.app/sitemap.xml",
+    sitemap: "https://stellaroid.tech/sitemap.xml",
   };
 }

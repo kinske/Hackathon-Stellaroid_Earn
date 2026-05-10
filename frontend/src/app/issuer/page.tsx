@@ -20,13 +20,13 @@ export default function IssuerPage() {
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "Issuer Dashboard",
-          url: "https://stellaroid-earn-demo.vercel.app/issuer",
+          url: "https://stellaroid.tech/issuer",
           description:
             "Inspect or register an issuer wallet in the on-chain trust registry for Stellaroid Earn.",
           isPartOf: {
             "@type": "WebApplication",
             name: "Stellaroid Earn",
-            url: "https://stellaroid-earn-demo.vercel.app",
+            url: "https://stellaroid.tech",
           },
         }}
       />
@@ -39,13 +39,13 @@ export default function IssuerPage() {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: "https://stellaroid-earn-demo.vercel.app",
+              item: "https://stellaroid.tech",
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "Issuer",
-              item: "https://stellaroid-earn-demo.vercel.app/issuer",
+              item: "https://stellaroid.tech/issuer",
             },
           ],
         }}

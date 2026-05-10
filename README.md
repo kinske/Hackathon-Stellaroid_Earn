@@ -4,7 +4,7 @@
 
 Issue, verify, and pay graduates on Stellar testnet  - Soroban + Freighter, end-to-end.
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-stellaroid--earn-F59E0B?style=for-the-badge&logo=vercel&logoColor=white)](https://stellaroid-earn-demo.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-stellaroid--earn-F59E0B?style=for-the-badge&logo=vercel&logoColor=white)](https://stellaroid.tech/)
 [![Stellar Testnet](https://img.shields.io/badge/Stellar-Testnet-7C3AED?style=for-the-badge&logo=stellar&logoColor=white)](https://stellar.expert/explorer/testnet/contract/CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET)
 [![Soroban SDK](https://img.shields.io/badge/Soroban_SDK-22.0.0-3B82F6?style=for-the-badge)](https://docs.rs/soroban-sdk/22.0.0)
 [![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
@@ -14,7 +14,7 @@ Issue, verify, and pay graduates on Stellar testnet  - Soroban + Freighter, end-
 
 | | |
 |---|---|
-| **Live demo** | [stellaroid-earn-demo.vercel.app](https://stellaroid-earn-demo.vercel.app/) |
+| **Live demo** | [stellaroid.tech](https://stellaroid.tech/) |
 | **Contract (current)** | [`CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET`](https://stellar.expert/explorer/testnet/contract/CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET) |
 | **Tx evidence** | [init](https://stellar.expert/explorer/testnet/tx/5f949662b430b059b71c9541a971852c527f869b537e123d3f3fb154f93c2e57) · [register](https://stellar.expert/explorer/testnet/tx/277075bbe55fc111f8c7888d72aa974eba5d1f596fa64900c466714ea57e320f) · [verify](https://stellar.expert/explorer/testnet/tx/47ad9094dff1895b68819afeb9b94f30146454c9d2ab1d580347e53139f7c896) · [payment](https://stellar.expert/explorer/testnet/tx/9a60bd71b8f37e89893480bda31c23ebf6deb080e2eb8912d43cf4cba42ebc4b) |
 | **Source verified** | [Stellar Expert source validation](https://stellar.expert/explorer/testnet/contract/CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET)  - WASM hash linked to [GitHub commit `71d2b03`](https://github.com/Iron-Mark/Workshop-Stellaroid_Earn/commit/71d2b032a7ca1da4e2b2e2d0186a940a17e542e0) |
@@ -32,10 +32,10 @@ The bootcamp/event submission is complete. Stellaroid Earn is now maintained as 
 - **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
 - **Maintenance checks:** [`MAINTENANCE.md`](MAINTENANCE.md)
 - **Custom domain cutover:** [`docs/STELLAROID_TECH_CUTOVER.md`](docs/STELLAROID_TECH_CUTOVER.md)
-- **Canonical live URL for now:** [`stellaroid-earn-demo.vercel.app`](https://stellaroid-earn-demo.vercel.app/)
-- **Operational status route:** `/status` after this branch is deployed.
+- **Canonical live URL:** [`stellaroid.tech`](https://stellaroid.tech/)
+- **Operational status route:** [`/status`](https://stellaroid.tech/status)
 
-`stellaroid.tech` should not replace the demo URL until DNS and HTTP checks pass.
+`www.stellaroid.tech` and `earn.stellaroid.tech` redirect to the canonical apex URL.
 
 ---
 
@@ -85,12 +85,12 @@ Every credential produces a public **Verified Badge** URL  - no wallet, no login
 <td width="50%" align="center">
 <img src="images/proof-verified.png" alt="Verified credential" width="100%"/><br/>
 <b>Verified</b><br/>
-<a href="https://stellaroid-earn-demo.vercel.app/proof/c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3">Try it yourself →</a>
+<a href="https://stellaroid.tech/proof/c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3">Try it yourself →</a>
 </td>
 <td width="50%" align="center">
 <img src="images/proof-locked.png" alt="Issued (locked) credential" width="100%"/><br/>
 <b>Issued (locked)</b><br/>
-<a href="https://stellaroid-earn-demo.vercel.app/proof/c6df0adf9d1a6f5a88d847e8e9a779e71aa2435d6fa47b47d065ebbfa8c1f890">Try it yourself →</a>
+<a href="https://stellaroid.tech/proof/c6df0adf9d1a6f5a88d847e8e9a779e71aa2435d6fa47b47d065ebbfa8c1f890">Try it yourself →</a>
 </td>
 </tr>
 </table>
@@ -209,9 +209,9 @@ Every action in the demo flow is a real transaction on Stellar testnet. Click an
 
 | Hash | Cohort | Status |
 |---|---|---|
-| [`c02ce160…aea3`](https://stellaroid-earn-demo.vercel.app/proof/c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3) | Stellar PH Bootcamp 2026 | Verified |
-| [`35a19276…702e`](https://stellaroid-earn-demo.vercel.app/proof/35a19276e58b8f742177892531def5e820f7c07bd8fd5a716ac710db09e6702e) | Stellar Philippines UniTour 2026 | Verified |
-| [`c6df0adf…f890`](https://stellaroid-earn-demo.vercel.app/proof/c6df0adf9d1a6f5a88d847e8e9a779e71aa2435d6fa47b47d065ebbfa8c1f890) | Stellar PH Bootcamp 2026 | Issued (locked demo) |
+| [`c02ce160…aea3`](https://stellaroid.tech/proof/c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3) | Stellar PH Bootcamp 2026 | Verified |
+| [`35a19276…702e`](https://stellaroid.tech/proof/35a19276e58b8f742177892531def5e820f7c07bd8fd5a716ac710db09e6702e) | Stellar Philippines UniTour 2026 | Verified |
+| [`c6df0adf…f890`](https://stellaroid.tech/proof/c6df0adf9d1a6f5a88d847e8e9a779e71aa2435d6fa47b47d065ebbfa8c1f890) | Stellar PH Bootcamp 2026 | Issued (locked demo) |
 
 ### Contract Functions
 
@@ -297,9 +297,9 @@ Stellaroid Earn implements **fee bump transactions** ([CAP-0015](https://stellar
 
 ## Metrics & Monitoring
 
-- **Metrics dashboard:** [`/metrics`](https://stellaroid-earn-demo.vercel.app/metrics)  - on-chain stats (events, proofs, transactions, certificates, rewards, payments) refreshed every 30s
-- **Health endpoint:** [`/api/health`](https://stellaroid-earn-demo.vercel.app/api/health)  - JSON health check (config, RPC latency, contract availability)
-- **Events API:** [`/api/events`](https://stellaroid-earn-demo.vercel.app/api/events)  - structured contract event data for external consumers
+- **Metrics dashboard:** [`/metrics`](https://stellaroid.tech/metrics)  - on-chain stats (events, proofs, transactions, certificates, rewards, payments) refreshed every 30s
+- **Health endpoint:** [`/api/health`](https://stellaroid.tech/api/health)  - JSON health check (config, RPC latency, contract availability)
+- **Events API:** [`/api/events`](https://stellaroid.tech/api/events)  - structured contract event data for external consumers
 - **Vercel Analytics:** Web analytics integrated via `@vercel/analytics`
 
 ### Data Indexing
@@ -358,7 +358,7 @@ https://github.com/user-attachments/assets/stellaroid-earn-demo.mp4
 
 Local copy: [`demo/stellaroid-earn-demo.mp4`](demo/stellaroid-earn-demo.mp4)
 
-**Demo Day slides:** [`/slides`](https://stellaroid-earn-demo.vercel.app/slides) (integrated into the app, arrow keys to navigate)
+**Demo Day slides:** [`/slides`](https://stellaroid.tech/slides) (integrated into the app, arrow keys to navigate)
 
 ---
 

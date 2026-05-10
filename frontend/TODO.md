@@ -12,7 +12,7 @@ Status snapshot for the Stellaroid Earn frontend. Project-level tracker lives at
 - [x] Human-readable error mapping (`src/lib/errors.ts`) — no raw ScVal / HostError surfaces
 - [x] RPC timeout helper (`src/lib/with-timeout.ts`)
 - [x] Contract client (`src/lib/contract-client.ts`) maps all 5 public fns + 6 error variants
-- [x] `next build` compiles; Vercel live at https://stellaroid-earn-demo.vercel.app/
+- [x] `next build` compiles; Vercel live at https://stellaroid.tech/
 - [x] Security hardening (2026-04-18):
   - HTTP security headers on all routes: CSP, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, HSTS (`next.config.ts`)
   - `/proof/[hash]` and `/proof/[hash]/embed`: hex-format guard (`notFound()` for invalid input) + `revalidate=60` replacing `force-dynamic`

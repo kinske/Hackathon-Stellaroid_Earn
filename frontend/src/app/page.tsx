@@ -107,7 +107,7 @@ export default function Landing() {
             <dt className="text-text-muted">App</dt>
             <dd className="m-0 font-mono text-[13px]">
               <Link href="/app" className="text-primary hover:underline">
-                stellaroid-earn-demo.vercel.app/app
+                stellaroid.tech/app
               </Link>
             </dd>
           </dl>

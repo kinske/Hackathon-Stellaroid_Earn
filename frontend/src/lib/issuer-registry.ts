@@ -16,7 +16,7 @@ const REGISTRY: Record<string, IssuerInfo> = {
   GAWIOVGFSPJDEIJJZUSVRFPVP3D5VNO2LGCU47KEHJD6MV277QKNR34D: {
     name: "Stellar Philippines UniTour",
     category: "bootcamp",
-    url: "https://stellaroid-earn-demo.vercel.app",
+    url: "https://stellaroid.tech",
   },
   // Add production issuers here as partnerships land.
 };

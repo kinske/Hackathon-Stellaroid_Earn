@@ -10,7 +10,7 @@ interface RecruiterCtaPanelProps {
 }
 
 export function RecruiterCtaPanel({ hash, candidateAddress }: RecruiterCtaPanelProps) {
-  const proofUrl = `https://stellaroid-earn-demo.vercel.app/proof/${hash}`;
+  const proofUrl = `https://stellaroid.tech/proof/${hash}`;
   const employerHref = candidateAddress
     ? `/employer?hash=${encodeURIComponent(hash)}&candidate=${encodeURIComponent(candidateAddress)}`
     : `/employer?hash=${encodeURIComponent(hash)}`;
