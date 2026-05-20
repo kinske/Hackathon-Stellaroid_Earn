@@ -24,7 +24,7 @@ Use this short checklist before a submission, demo, or public share.
 - Status page: https://stellaroid.tech/status
 - Verified proof: https://stellaroid.tech/proof/c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3
 - Stellar testnet contract:
-  https://stellar.expert/explorer/testnet/contract/CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET
+  https://stellar.expert/explorer/testnet/contract/CDMUOHMARNVOJZM3IVOCJUPGBHDTHFBMZCCZXEZPQDVJGILH3NIKTTW3
 
 ## Demo Talk Track
 

@@ -40,6 +40,7 @@ export function AppExperience({ sidebarActivity }: AppExperienceProps) {
     verified: false,
     paid: false,
     credentialStatus: undefined as CertificateStatus | undefined,
+    credentialTitle: undefined as string | undefined,
     lastHash: undefined as string | undefined,
     lastStudent: undefined as string | undefined,
   });
@@ -96,13 +97,14 @@ export function AppExperience({ sidebarActivity }: AppExperienceProps) {
                           <div className="w-px shrink-0 bg-linear-to-b from-primary/50 to-transparent" />
                           <div className="flex-1 min-w-0">
                             <RegisterForm
-                              onSuccess={(hash, student) =>
+                              onSuccess={(hash, student, _txHash, credentialTitle) =>
                                 setMilestones((m) => ({
                                   ...m,
                                   registered: true,
                                   verified: false,
                                   paid: false,
                                   credentialStatus: "issued",
+                                  credentialTitle: credentialTitle?.trim() || undefined,
                                   lastHash: hash,
                                   lastStudent: student,
                                 }))
@@ -141,6 +143,7 @@ export function AppExperience({ sidebarActivity }: AppExperienceProps) {
                                   ...m,
                                   verified: status === "verified",
                                   credentialStatus: status,
+                                  credentialTitle: record?.title?.trim() || m.credentialTitle,
                                   lastHash: hash,
                                   lastStudent: record?.owner ?? m.lastStudent,
                                 }))
@@ -169,6 +172,7 @@ export function AppExperience({ sidebarActivity }: AppExperienceProps) {
                                   ...m,
                                   verified: status === "verified",
                                   credentialStatus: status,
+                                  credentialTitle: record?.title?.trim() || m.credentialTitle,
                                   lastHash: hash,
                                   lastStudent: record?.owner ?? m.lastStudent,
                                 }))
@@ -243,6 +247,7 @@ export function AppExperience({ sidebarActivity }: AppExperienceProps) {
             <ProofBlockPreview
               hash={milestones.lastHash}
               certStatus={milestones.credentialStatus}
+              credentialTitle={milestones.credentialTitle}
             />
           </aside>
         </div>

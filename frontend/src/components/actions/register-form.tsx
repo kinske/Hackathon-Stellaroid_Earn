@@ -10,7 +10,12 @@ import { appConfig, hasRequiredConfig } from "@/lib/config";
 import { useFreighterWallet } from "@/hooks/use-freighter-wallet";
 
 export interface RegisterFormProps {
-  onSuccess?: (hash: string, studentAddr: string, txHash?: string) => void;
+  onSuccess?: (
+    hash: string,
+    studentAddr: string,
+    txHash?: string,
+    credentialTitle?: string,
+  ) => void;
 }
 
 function isValidAddress(addr: string): boolean {
@@ -202,7 +207,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             }
           : undefined,
       });
-      onSuccess?.(certHash.trim(), studentAddr.trim(), txHash);
+      onSuccess?.(certHash.trim(), studentAddr.trim(), txHash, credentialTitle.trim());
     } catch (e) {
       const h = humanizeError(e);
       const msg = e instanceof Error ? e.message : "";

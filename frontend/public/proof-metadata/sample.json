@@ -1,0 +1,27 @@
+{
+  "title": "Stellar Smart Contract Bootcamp Completion",
+  "description": "Awarded after shipping a working Soroban contract, deploying it to Stellar testnet, and demoing the full register, verify, and pay flow through Freighter.",
+  "cohort": "Stellar PH Bootcamp 2026",
+  "criteria": "Complete the assigned Soroban contract, pass the test suite, deploy to Stellar testnet, connect the dApp to Freighter, and present an end-to-end verified badge demo.",
+  "skills": [
+    "Soroban smart contracts",
+    "Stellar testnet deployment",
+    "Freighter wallet integration",
+    "Next.js dApp frontend",
+    "On-chain credential verification"
+  ],
+  "evidence": [
+    {
+      "label": "About the demo",
+      "href": "/about"
+    },
+    {
+      "label": "Launch the app flow",
+      "href": "/app"
+    },
+    {
+      "label": "Bootcamp contract verified badge",
+      "href": "https://stellar.expert/explorer/testnet/contract/CDMUOHMARNVOJZM3IVOCJUPGBHDTHFBMZCCZXEZPQDVJGILH3NIKTTW3"
+    }
+  ]
+}

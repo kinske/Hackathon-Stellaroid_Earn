@@ -32,7 +32,7 @@ const PROOF_METADATA: Record<string, ProofMetadata> = {
       },
       {
         label: "Bootcamp contract verified badge",
-        href: "https://stellar.expert/explorer/testnet/contract/CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET",
+        href: "https://stellar.expert/explorer/testnet/contract/CDMUOHMARNVOJZM3IVOCJUPGBHDTHFBMZCCZXEZPQDVJGILH3NIKTTW3",
       },
     ],
   },

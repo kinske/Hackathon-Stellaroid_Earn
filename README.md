@@ -5,7 +5,7 @@
 Issue, verify, and pay graduates on Stellar testnet  - Soroban + Freighter, end-to-end.
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-stellaroid--earn-F59E0B?style=for-the-badge&logo=vercel&logoColor=white)](https://stellaroid.tech/)
-[![Stellar Testnet](https://img.shields.io/badge/Stellar-Testnet-7C3AED?style=for-the-badge&logo=stellar&logoColor=white)](https://stellar.expert/explorer/testnet/contract/CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET)
+[![Stellar Testnet](https://img.shields.io/badge/Stellar-Testnet-7C3AED?style=for-the-badge&logo=stellar&logoColor=white)](https://stellar.expert/explorer/testnet/contract/CDMUOHMARNVOJZM3IVOCJUPGBHDTHFBMZCCZXEZPQDVJGILH3NIKTTW3)
 [![Soroban SDK](https://img.shields.io/badge/Soroban_SDK-22.0.0-3B82F6?style=for-the-badge)](https://docs.rs/soroban-sdk/22.0.0)
 [![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge)](LICENSE)
@@ -15,9 +15,9 @@ Issue, verify, and pay graduates on Stellar testnet  - Soroban + Freighter, end-
 | | |
 |---|---|
 | **Live demo** | [stellaroid.tech](https://stellaroid.tech/) |
-| **Contract (current)** | [`CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET`](https://stellar.expert/explorer/testnet/contract/CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET) |
-| **Tx evidence** | [init](https://stellar.expert/explorer/testnet/tx/5f949662b430b059b71c9541a971852c527f869b537e123d3f3fb154f93c2e57) · [register](https://stellar.expert/explorer/testnet/tx/277075bbe55fc111f8c7888d72aa974eba5d1f596fa64900c466714ea57e320f) · [verify](https://stellar.expert/explorer/testnet/tx/47ad9094dff1895b68819afeb9b94f30146454c9d2ab1d580347e53139f7c896) · [payment](https://stellar.expert/explorer/testnet/tx/9a60bd71b8f37e89893480bda31c23ebf6deb080e2eb8912d43cf4cba42ebc4b) |
-| **Source verified** | [Stellar Expert source validation](https://stellar.expert/explorer/testnet/contract/CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET)  - WASM hash linked to [GitHub commit `71d2b03`](https://github.com/Iron-Mark/Workshop-Stellaroid_Earn/commit/71d2b032a7ca1da4e2b2e2d0186a940a17e542e0) |
+| **Contract (current)** | [`CDMUOHMARNVOJZM3IVOCJUPGBHDTHFBMZCCZXEZPQDVJGILH3NIKTTW3`](https://stellar.expert/explorer/testnet/contract/CDMUOHMARNVOJZM3IVOCJUPGBHDTHFBMZCCZXEZPQDVJGILH3NIKTTW3) |
+| **Tx evidence** | [init](https://stellar.expert/explorer/testnet/tx/37afd2a5d3da2df250aabd2ce696bd22097ed7412bf3be381c446697e96996bb) · [register](https://stellar.expert/explorer/testnet/tx/f3d6c0f4e23777a68295cff1a59ef089f639d52d6fd005d7ba98bbf866c68c13) · [verify](https://stellar.expert/explorer/testnet/tx/cf734925b00ba51ad800e16f4ac94874a6b9c9a194d44a1a5b82a6f6040bba0b) |
+| **Source verification** | Fresh security-hardened testnet deploy. WASM hash `59ca403e347f4c24b1dd16fbcb65662c2837cc852946e3ae88374eed509d6f7f`; Stellar Expert source re-verification pending. |
 | **Submission** | Rise In · Stellar Smart Contract Bootcamp · Stellar PH Bootcamp 2026 |
 | **Result** | **Top 5 / 105 participants** · Score: 75.00 |
 
@@ -96,7 +96,7 @@ Every credential produces a public **Verified Badge** URL  - no wallet, no login
 </tr>
 </table>
 
-Contract on Stellar Expert: [`CA7P5EPY…GO6TET`](https://stellar.expert/explorer/testnet/contract/CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET) (source verified)
+Contract on Stellar Expert: [`CDMUOHMA…IKTTW3`](https://stellar.expert/explorer/testnet/contract/CDMUOHMARNVOJZM3IVOCJUPGBHDTHFBMZCCZXEZPQDVJGILH3NIKTTW3)
 
 ![Contract history on Stellar Expert](images/stellar-expert.png)
 
@@ -201,18 +201,15 @@ Every action in the demo flow is a real transaction on Stellar testnet. Click an
 
 | Action | Tx Hash | Result |
 |---|---|---|
-| `init` | [`5f949662…2e57`](https://stellar.expert/explorer/testnet/tx/5f949662b430b059b71c9541a971852c527f869b537e123d3f3fb154f93c2e57) | Contract initialized with admin + XLM token |
-| `register_certificate` | [`277075bb…320f`](https://stellar.expert/explorer/testnet/tx/277075bbe55fc111f8c7888d72aa974eba5d1f596fa64900c466714ea57e320f) | Credential hash registered for student |
-| `verify_certificate` | [`47ad9094…c896`](https://stellar.expert/explorer/testnet/tx/47ad9094dff1895b68819afeb9b94f30146454c9d2ab1d580347e53139f7c896) | Status changed to Verified |
-| `reward_student` | [`9a60bd71…bc4b`](https://stellar.expert/explorer/testnet/tx/9a60bd71b8f37e89893480bda31c23ebf6deb080e2eb8912d43cf4cba42ebc4b) | Admin rewarded graduate 10 XLM |
+| `init` | [`37afd2a5…96bb`](https://stellar.expert/explorer/testnet/tx/37afd2a5d3da2df250aabd2ce696bd22097ed7412bf3be381c446697e96996bb) | Contract initialized with admin + XLM token |
+| `register_certificate` | [`f3d6c0f4…8c13`](https://stellar.expert/explorer/testnet/tx/f3d6c0f4e23777a68295cff1a59ef089f639d52d6fd005d7ba98bbf866c68c13) | Demo credential hash registered for student |
+| `verify_certificate` | [`cf734925…a0b`](https://stellar.expert/explorer/testnet/tx/cf734925b00ba51ad800e16f4ac94874a6b9c9a194d44a1a5b82a6f6040bba0b) | Status changed to Verified |
 
-**Live certificates** (testnet, contract [`CA7P5EPY…`](https://stellar.expert/explorer/testnet/contract/CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET)):
+**Live certificates** (testnet, contract [`CDMUOHMA…`](https://stellar.expert/explorer/testnet/contract/CDMUOHMARNVOJZM3IVOCJUPGBHDTHFBMZCCZXEZPQDVJGILH3NIKTTW3)):
 
 | Hash | Cohort | Status |
 |---|---|---|
 | [`c02ce160…aea3`](https://stellaroid.tech/proof/c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3) | Stellar PH Bootcamp 2026 | Verified |
-| [`35a19276…702e`](https://stellaroid.tech/proof/35a19276e58b8f742177892531def5e820f7c07bd8fd5a716ac710db09e6702e) | Stellar Philippines UniTour 2026 | Verified |
-| [`c6df0adf…f890`](https://stellaroid.tech/proof/c6df0adf9d1a6f5a88d847e8e9a779e71aa2435d6fa47b47d065ebbfa8c1f890) | Stellar PH Bootcamp 2026 | Issued (locked demo) |
 
 ### Contract Functions
 

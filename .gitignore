@@ -30,6 +30,8 @@ admin-key.json
 .claude/scheduled_tasks.lock
 .vercel
 .mcp.json
+.codex/
+.tools/
 
 # Superpowers brainstorm runtime files
 .superpowers/

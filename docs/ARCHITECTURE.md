@@ -125,8 +125,8 @@ Anyone opens /proof/<hash> → Next.js RSC calls simulateTransaction
 | Component | Platform | URL |
 |---|---|---|
 | Frontend | Vercel | stellaroid.tech |
-| Contract | Stellar Testnet | CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET |
-| Source verification | Stellar Expert | WASM hash linked to GitHub commit |
+| Contract | Stellar Testnet | CDMUOHMARNVOJZM3IVOCJUPGBHDTHFBMZCCZXEZPQDVJGILH3NIKTTW3 |
+| Source verification | Stellar Expert | Fresh security-hardened deploy; source re-verification pending |
 
 ## Technology Decisions
 

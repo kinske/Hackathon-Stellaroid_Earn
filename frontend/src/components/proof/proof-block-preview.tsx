@@ -1,14 +1,13 @@
 import { ArrowRight, Lock } from "lucide-react";
 import { Badge } from "@/components/ui";
-import { getProofMetadata } from "@/lib/proof-metadata";
+import { getProofPreviewTitle } from "@/lib/proof-preview";
 import type { CertificateStatus } from "@/lib/types";
 
 export interface ProofBlockPreviewProps {
   hash?: string;
   certStatus?: CertificateStatus;
+  credentialTitle?: string;
 }
-
-const FALLBACK_TITLE = "Pending Issuance";
 
 function statusBadge(status: CertificateStatus) {
   switch (status) {
@@ -27,9 +26,12 @@ function statusBadge(status: CertificateStatus) {
   }
 }
 
-export function ProofBlockPreview({ hash, certStatus }: ProofBlockPreviewProps) {
-  const metadata = hash ? getProofMetadata(hash) : null;
-  const credentialTitle = metadata?.title ?? FALLBACK_TITLE;
+export function ProofBlockPreview({
+  hash,
+  certStatus,
+  credentialTitle,
+}: ProofBlockPreviewProps) {
+  const previewTitle = getProofPreviewTitle({ hash, credentialTitle });
   const badge = certStatus ? statusBadge(certStatus) : null;
 
   return (
@@ -38,7 +40,7 @@ export function ProofBlockPreview({ hash, certStatus }: ProofBlockPreviewProps) 
 
       <div className="flex flex-col gap-1.5">
         <h2 className="text-base font-semibold text-text font-heading leading-snug">
-          {credentialTitle}
+          {previewTitle}
         </h2>
         {badge ? (
           <Badge tone={badge.tone} dot>
