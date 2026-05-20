@@ -29,7 +29,6 @@ export const appConfig = {
   readAddress: process.env.NEXT_PUBLIC_STELLAR_READ_ADDRESS ?? "",
   adminAddress: process.env.NEXT_PUBLIC_STELLAR_ADMIN_ADDRESS ?? "",
   sponsorAddress: process.env.NEXT_PUBLIC_FEE_SPONSOR_ADDRESS ?? "",
-  feeSponsorClientEnabled: process.env.NEXT_PUBLIC_FEE_SPONSOR_CLIENT_ENABLED === "1",
 };
 
 const networkPassphraseByName: Record<string, string> = {

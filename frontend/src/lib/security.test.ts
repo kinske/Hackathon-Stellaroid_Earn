@@ -9,11 +9,14 @@ import {
 
 test("safe URL helpers reject script, data, localhost, and private-network URLs", () => {
   assert.equal(isSafeExternalHttpUrl("https://stellaroid.tech/proof"), true);
+  assert.equal(isSafeExternalHttpUrl("http://stellaroid.tech/proof"), false);
   assert.equal(isSafeExternalHttpUrl("javascript:alert(1)"), false);
   assert.equal(isSafeExternalHttpUrl("data:text/html,<script>x</script>"), false);
   assert.equal(isSafeExternalHttpUrl("http://localhost:3000"), false);
   assert.equal(isSafeExternalHttpUrl("https://127.0.0.1/meta.json"), false);
   assert.equal(isSafeExternalHttpUrl("https://10.0.0.3/meta.json"), false);
+  assert.equal(isSafeExternalHttpUrl("https://[::ffff:7f00:1]/meta.json"), false);
+  assert.equal(isSafeExternalHttpUrl("https://[::ffff:0a00:1]/meta.json"), false);
 
   assert.equal(isSafeInternalHref("/about"), true);
   assert.equal(isSafeInternalHref("proof/abc"), false);
@@ -47,4 +50,3 @@ test("E2E mode is only allowed in local test contexts", () => {
   assert.equal(isE2EModeAllowed({ nodeEnv: "production", ci: true }), false);
   assert.equal(isE2EModeAllowed({ vercelEnv: "preview", ci: true }), false);
 });
-

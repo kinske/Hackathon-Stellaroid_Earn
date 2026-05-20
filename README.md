@@ -294,7 +294,7 @@ Stellaroid Earn keeps **fee bump transaction** support ([CAP-0015](https://stell
 **Implementation:**
 - Server route: [`frontend/src/app/api/fee-bump/route.ts`](frontend/src/app/api/fee-bump/route.ts)
 - Client helper: [`frontend/src/lib/fee-bump.ts`](frontend/src/lib/fee-bump.ts)
-- Config: `FEE_SPONSOR_SECRET` + `FEE_SPONSOR_TOKEN` are server-only. `NEXT_PUBLIC_FEE_SPONSOR_CLIENT_ENABLED` defaults off.
+- Config: `FEE_SPONSOR_SECRET` + `FEE_SPONSOR_TOKEN` are server-only. Public browser auto-sponsorship stays disabled; trusted server callers must provide the bearer token explicitly.
 - Browser fallback: normal user-paid Freighter transactions remain the default path.
 
 ---

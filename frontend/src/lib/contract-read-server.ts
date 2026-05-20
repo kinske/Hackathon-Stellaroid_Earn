@@ -22,6 +22,11 @@ import type {
   OpportunityStatus,
 } from "@/lib/types";
 import { MAX_OPPORTUNITY_MILESTONES } from "@/lib/types";
+import {
+  normalizeOpportunityId,
+  type OpportunityIdInput,
+  opportunityIdToBigInt,
+} from "@/lib/opportunity-id";
 
 const FALLBACK_SIMULATION_SOURCE =
   "GBAKLRUJEOZGWKSHJFFWJ4DINXQZEJBT7JQTR5T4GATQU2SNO4ZFHZQ4";
@@ -109,6 +114,18 @@ function normalizeTimestamp(value: unknown): number {
   if (typeof value === "bigint") return Number(value);
   if (typeof value === "string") return Number(value);
   return 0;
+}
+
+function normalizeBigInt(value: unknown): bigint {
+  if (typeof value === "bigint") return value;
+  if (typeof value === "number") {
+    if (!Number.isSafeInteger(value)) {
+      throw new Error("Contract integer is outside JavaScript's safe range.");
+    }
+    return BigInt(value);
+  }
+  if (typeof value === "string") return BigInt(value);
+  throw new Error("Unable to parse integer value returned by the contract.");
 }
 
 function getServer() {
@@ -332,12 +349,12 @@ function normalizeOpportunity(value: unknown): OpportunityRecord | null {
   if (value == null) return null;
   const record = value as Record<string, unknown>;
   return {
-    id: normalizeTimestamp(record.id),
+    id: normalizeOpportunityId(normalizeBigInt(record.id)),
     employer: normalizeAddress(record.employer),
     candidate: normalizeAddress(record.candidate),
     certHash: normalizeString(record.cert_hash),
     title: normalizeString(record.title),
-    amount: BigInt(normalizeTimestamp(record.amount)),
+    amount: normalizeBigInt(record.amount),
     status: normalizeOpportunityStatus(record.status),
     milestoneCount: Math.min(
       normalizeTimestamp(record.milestone_count),
@@ -350,11 +367,11 @@ function normalizeOpportunity(value: unknown): OpportunityRecord | null {
   };
 }
 
-export async function getOpportunityServer(oppId: number) {
+export async function getOpportunityServer(oppId: OpportunityIdInput) {
   ensureConfigured();
   const server = getServer();
   const sourceAccount = new Account(getSimulationSourceAddress(), "0");
-  const args = [nativeToScVal(BigInt(oppId), { type: "u64" })];
+  const args = [nativeToScVal(opportunityIdToBigInt(oppId), { type: "u64" })];
 
   const transaction = new TransactionBuilder(sourceAccount, {
     fee: BASE_FEE,

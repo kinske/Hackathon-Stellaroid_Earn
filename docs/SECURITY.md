@@ -36,7 +36,7 @@ smart-contract, frontend, infrastructure, and operational layers.
 | 6 | **Permissions-Policy** | PASS | `camera=(), microphone=(), geolocation=()`  - no sensitive device APIs exposed. |
 | 7 | **Input validation** | PASS | Proof hashes, token amounts, opportunity milestones, metadata URLs, issuer URLs, and JSON-LD data are validated or sanitized before use. |
 | 8 | **Error normalization** | PASS | `humanizeError()` maps all contract and network errors to safe, non-leaking copy. |
-| 9 | **SSRF prevention** | PASS | Metadata and evidence URLs must be http(s), cannot target localhost/private IP ranges, and remote metadata fetches use size/time limits. |
+| 9 | **SSRF prevention** | PASS | Metadata and evidence URLs must be HTTPS, cannot target localhost/private IP ranges including IPv4-mapped IPv6, and remote metadata fetches use size/time limits. |
 | 10 | **No secrets in client bundle** | PASS | All `NEXT_PUBLIC_*` env vars are non-sensitive public config (RPC URL, network passphrase, contract ID). |
 | 11 | **Wallet validation** | PASS | Network passphrase returned by Freighter is compared to the expected value before signing; mismatch aborts. |
 

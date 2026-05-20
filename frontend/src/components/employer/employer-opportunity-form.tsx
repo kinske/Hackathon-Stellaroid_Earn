@@ -36,7 +36,7 @@ export function EmployerOpportunityForm({
   const [amount, setAmount] = useState("");
   const [milestones, setMilestones] = useState("1");
   const [submitting, setSubmitting] = useState(false);
-  const [createdOppId, setCreatedOppId] = useState<number | null>(null);
+  const [createdOppId, setCreatedOppId] = useState<string | null>(null);
   const [opportunityFunded, setOpportunityFunded] = useState(false);
   const [funding, setFunding] = useState(false);
 
@@ -82,7 +82,7 @@ export function EmployerOpportunityForm({
         15000,
         "create opportunity",
       );
-      const oppId = result?.result as number | undefined;
+      const oppId = result?.result as string | undefined;
       if (oppId !== undefined) {
         setCreatedOppId(oppId);
         setOpportunityFunded(false);

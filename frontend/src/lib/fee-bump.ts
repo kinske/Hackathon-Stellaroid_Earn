@@ -1,9 +1,3 @@
-import { appConfig } from "@/lib/config";
-
-export function isFeeSponsorAvailable(): boolean {
-  return Boolean(appConfig.sponsorAddress && appConfig.feeSponsorClientEnabled);
-}
-
 export async function requestFeeBump(
   signedXdr: string,
   authorizationToken?: string,

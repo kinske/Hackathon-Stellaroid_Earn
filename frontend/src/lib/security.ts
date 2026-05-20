@@ -13,11 +13,34 @@ function truncate(value: string, max: number) {
   return value.trim().slice(0, max);
 }
 
+function ipv4FromMappedIpv6(host: string): string | null {
+  const dotted = /^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/i.exec(host);
+  if (dotted) return dotted[1];
+
+  const hex = /^::ffff:([0-9a-f]{1,4}):([0-9a-f]{1,4})$/i.exec(host);
+  if (!hex) return null;
+
+  const high = Number.parseInt(hex[1], 16);
+  const low = Number.parseInt(hex[2], 16);
+  if (!Number.isFinite(high) || !Number.isFinite(low)) return null;
+
+  return [
+    (high >> 8) & 0xff,
+    high & 0xff,
+    (low >> 8) & 0xff,
+    low & 0xff,
+  ].join(".");
+}
+
 function isPrivateHostname(hostname: string) {
   const host = hostname.toLowerCase().replace(/^\[|\]$/g, "");
+  const mappedIpv4 = ipv4FromMappedIpv6(host);
+  if (mappedIpv4 && isPrivateHostname(mappedIpv4)) return true;
+
   if (
     host === "localhost" ||
     host.endsWith(".localhost") ||
+    host === "::" ||
     host === "0.0.0.0" ||
     host === "::1" ||
     host.startsWith("127.") ||
@@ -36,7 +59,7 @@ function isPrivateHostname(hostname: string) {
 export function isSafeExternalHttpUrl(value: string): boolean {
   try {
     const url = new URL(value.trim());
-    if (url.protocol !== "https:" && url.protocol !== "http:") return false;
+    if (url.protocol !== "https:") return false;
     return !isPrivateHostname(url.hostname);
   } catch {
     return false;

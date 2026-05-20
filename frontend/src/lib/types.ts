@@ -61,7 +61,7 @@ export type OpportunityStatus =
   | "cancelled";
 
 export type OpportunityRecord = {
-  id: number;
+  id: string;
   employer: string;
   candidate: string;
   certHash: string;
