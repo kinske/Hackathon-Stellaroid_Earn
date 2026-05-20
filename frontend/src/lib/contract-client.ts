@@ -18,8 +18,11 @@ import {
   hasRequiredConfig,
 } from "@/lib/config";
 import { DEFAULT_SAMPLE_PROOF_HASH } from "@/lib/demo-data";
-import { isFeeSponsorAvailable, requestFeeBump } from "@/lib/fee-bump";
 import { signWithFreighter } from "@/lib/freighter";
+import {
+  opportunityIdToBigInt,
+  type OpportunityIdInput,
+} from "@/lib/opportunity-id";
 import type {
   CertificateStatus,
   IssuerRecord,
@@ -27,6 +30,7 @@ import type {
   OpportunityRecord,
   OpportunityStatus,
 } from "@/lib/types";
+import { MAX_OPPORTUNITY_MILESTONES as MAX_MILESTONES } from "@/lib/types";
 
 const FALLBACK_SIMULATION_SOURCE =
   "GBAKLRUJEOZGWKSHJFFWJ4DINXQZEJBT7JQTR5T4GATQU2SNO4ZFHZQ4";
@@ -84,7 +88,7 @@ function getReadAddress() {
 
 type ContractArg =
   | { value: string; type: "address" | "string" }
-  | { value: bigint | number; type: "i128" | "u32" }
+  | { value: bigint | number; type: "i128" | "u32" | "u64" }
   | { value: Uint8Array; type: "bytes32" };
 
 function hexToBytes32(hex: string): Uint8Array {
@@ -393,18 +397,8 @@ async function signAndSubmit<T>(
     sourceAddress,
   );
 
-  // Fee bump: if a sponsor is configured, wrap the signed tx so sponsor pays gas.
-  let submissionXdr = signedXdr;
-  if (isFeeSponsorAvailable()) {
-    try {
-      submissionXdr = await requestFeeBump(signedXdr);
-    } catch {
-      // Sponsor unavailable — fall back to user-paid fees silently.
-    }
-  }
-
   const signedTransaction = TransactionBuilder.fromXDR(
-    submissionXdr,
+    signedXdr,
     getExpectedNetworkPassphrase(),
   );
 
@@ -699,15 +693,21 @@ function normalizeOpportunity(value: unknown): OpportunityRecord | null {
   if (value == null) return null;
   const record = value as Record<string, unknown>;
   return {
-    id: Number(normalizeBigInt(record.id)),
+    id: normalizeBigInt(record.id).toString(),
     employer: normalizeAddress(record.employer),
     candidate: normalizeAddress(record.candidate),
     certHash: normalizeString(record.cert_hash),
     title: normalizeString(record.title),
     amount: normalizeBigInt(record.amount),
     status: normalizeOpportunityStatus(record.status),
-    milestoneCount: Number(normalizeBigInt(record.milestone_count)),
-    currentMilestone: Number(normalizeBigInt(record.current_milestone)),
+    milestoneCount: Math.min(
+      Number(normalizeBigInt(record.milestone_count)),
+      MAX_MILESTONES,
+    ),
+    currentMilestone: Math.min(
+      Number(normalizeBigInt(record.current_milestone)),
+      MAX_MILESTONES,
+    ),
   };
 }
 
@@ -928,70 +928,70 @@ export async function createOpportunity(
       { value: amount, type: "i128" },
       { value: milestoneCount, type: "u32" },
     ]),
-    (v) => Number(normalizeBigInt(v)),
+    (v) => normalizeBigInt(v).toString(),
   );
 }
 
-export async function fundOpportunity(employer: string, oppId: number) {
+export async function fundOpportunity(employer: string, oppId: OpportunityIdInput) {
   return signAndSubmit(
     employer,
     "fund_opportunity",
     buildArgs([
       { value: employer, type: "address" },
-      { value: BigInt(oppId), type: "u32" },
+      { value: opportunityIdToBigInt(oppId), type: "u64" },
     ]),
   );
 }
 
-export async function submitMilestone(candidate: string, oppId: number) {
+export async function submitMilestone(candidate: string, oppId: OpportunityIdInput) {
   return signAndSubmit(
     candidate,
     "submit_milestone",
     buildArgs([
       { value: candidate, type: "address" },
-      { value: BigInt(oppId), type: "u32" },
+      { value: opportunityIdToBigInt(oppId), type: "u64" },
     ]),
   );
 }
 
-export async function approveMilestone(employer: string, oppId: number) {
+export async function approveMilestone(employer: string, oppId: OpportunityIdInput) {
   return signAndSubmit(
     employer,
     "approve_milestone",
     buildArgs([
       { value: employer, type: "address" },
-      { value: BigInt(oppId), type: "u32" },
+      { value: opportunityIdToBigInt(oppId), type: "u64" },
     ]),
   );
 }
 
-export async function releasePayment(employer: string, oppId: number) {
+export async function releasePayment(employer: string, oppId: OpportunityIdInput) {
   return signAndSubmit(
     employer,
     "release_payment",
     buildArgs([
       { value: employer, type: "address" },
-      { value: BigInt(oppId), type: "u32" },
+      { value: opportunityIdToBigInt(oppId), type: "u64" },
     ]),
   );
 }
 
-export async function refundOpportunity(employer: string, oppId: number) {
+export async function refundOpportunity(employer: string, oppId: OpportunityIdInput) {
   return signAndSubmit(
     employer,
     "refund_opportunity",
     buildArgs([
       { value: employer, type: "address" },
-      { value: BigInt(oppId), type: "u32" },
+      { value: opportunityIdToBigInt(oppId), type: "u64" },
     ]),
   );
 }
 
-export async function getOpportunity(oppId: number) {
+export async function getOpportunity(oppId: OpportunityIdInput) {
   return simulateRead(
     getReadAddress(),
     "get_opportunity",
-    buildArgs([{ value: BigInt(oppId), type: "u32" }]),
+    buildArgs([{ value: opportunityIdToBigInt(oppId), type: "u64" }]),
     normalizeOpportunity,
   );
 }

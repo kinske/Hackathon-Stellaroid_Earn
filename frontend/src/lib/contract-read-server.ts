@@ -13,6 +13,7 @@ import {
   getExpectedNetworkPassphrase,
   hasRequiredConfig,
 } from "@/lib/config";
+import { DEFAULT_SAMPLE_PROOF_HASH } from "@/lib/demo-data";
 import type {
   CertificateStatus,
   IssuerRecord,
@@ -20,6 +21,12 @@ import type {
   OpportunityRecord,
   OpportunityStatus,
 } from "@/lib/types";
+import { MAX_OPPORTUNITY_MILESTONES } from "@/lib/types";
+import {
+  normalizeOpportunityId,
+  type OpportunityIdInput,
+  opportunityIdToBigInt,
+} from "@/lib/opportunity-id";
 
 const FALLBACK_SIMULATION_SOURCE =
   "GBAKLRUJEOZGWKSHJFFWJ4DINXQZEJBT7JQTR5T4GATQU2SNO4ZFHZQ4";
@@ -107,6 +114,18 @@ function normalizeTimestamp(value: unknown): number {
   if (typeof value === "bigint") return Number(value);
   if (typeof value === "string") return Number(value);
   return 0;
+}
+
+function normalizeBigInt(value: unknown): bigint {
+  if (typeof value === "bigint") return value;
+  if (typeof value === "number") {
+    if (!Number.isSafeInteger(value)) {
+      throw new Error("Contract integer is outside JavaScript's safe range.");
+    }
+    return BigInt(value);
+  }
+  if (typeof value === "string") return BigInt(value);
+  throw new Error("Unable to parse integer value returned by the contract.");
 }
 
 function getServer() {
@@ -205,6 +224,9 @@ function buildSimulationTransaction(
 
 export async function getCertificateServer(certHashHex: string) {
   if (appConfig.e2eMode) {
+    if (certHashHex.trim().toLowerCase() !== DEFAULT_SAMPLE_PROOF_HASH.toLowerCase()) {
+      return null;
+    }
     return normalizeCertificate({
       owner: E2E_WALLET_ADDRESS,
       issuer: E2E_WALLET_ADDRESS,
@@ -327,23 +349,29 @@ function normalizeOpportunity(value: unknown): OpportunityRecord | null {
   if (value == null) return null;
   const record = value as Record<string, unknown>;
   return {
-    id: normalizeTimestamp(record.id),
+    id: normalizeOpportunityId(normalizeBigInt(record.id)),
     employer: normalizeAddress(record.employer),
     candidate: normalizeAddress(record.candidate),
     certHash: normalizeString(record.cert_hash),
     title: normalizeString(record.title),
-    amount: BigInt(normalizeTimestamp(record.amount)),
+    amount: normalizeBigInt(record.amount),
     status: normalizeOpportunityStatus(record.status),
-    milestoneCount: normalizeTimestamp(record.milestone_count),
-    currentMilestone: normalizeTimestamp(record.current_milestone),
+    milestoneCount: Math.min(
+      normalizeTimestamp(record.milestone_count),
+      MAX_OPPORTUNITY_MILESTONES,
+    ),
+    currentMilestone: Math.min(
+      normalizeTimestamp(record.current_milestone),
+      MAX_OPPORTUNITY_MILESTONES,
+    ),
   };
 }
 
-export async function getOpportunityServer(oppId: number) {
+export async function getOpportunityServer(oppId: OpportunityIdInput) {
   ensureConfigured();
   const server = getServer();
   const sourceAccount = new Account(getSimulationSourceAddress(), "0");
-  const args = [nativeToScVal(oppId, { type: "u32" })];
+  const args = [nativeToScVal(opportunityIdToBigInt(oppId), { type: "u64" })];
 
   const transaction = new TransactionBuilder(sourceAccount, {
     fee: BASE_FEE,

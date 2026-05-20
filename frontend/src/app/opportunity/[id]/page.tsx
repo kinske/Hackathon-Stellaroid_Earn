@@ -5,6 +5,7 @@ import { SiteNav } from "@/components/layout/site-nav";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { FreighterWalletProvider } from "@/hooks/use-freighter-wallet";
 import { OpportunityCard } from "@/components/opportunity/opportunity-card";
+import { normalizeOpportunityId } from "@/lib/opportunity-id";
 
 export const revalidate = 60;
 
@@ -22,12 +23,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function OpportunityPage({ params }: PageProps) {
   const { id } = await params;
-  const numericId = parseInt(id, 10);
-  if (isNaN(numericId) || numericId < 0) notFound();
+  let opportunityId: string;
+  try {
+    opportunityId = normalizeOpportunityId(id);
+  } catch {
+    notFound();
+  }
 
   let opportunity;
   try {
-    opportunity = await getOpportunityServer(numericId);
+    opportunity = await getOpportunityServer(opportunityId);
   } catch {
     opportunity = null;
   }
