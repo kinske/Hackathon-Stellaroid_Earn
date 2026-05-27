@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteNav } from "@/components/layout/site-nav";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/404",
   title: "404 — Not Found",
   description: "This page does not exist on Stellaroid Earn.",
   robots: { index: false, follow: false },
-};
+});
 
 export default function NotFound() {
   return (

@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
 import { SiteNav } from "@/components/layout/site-nav";
-
-export const metadata: Metadata = {
-  title: "Look Up a Certificate",
-  description:
-    "Paste a SHA-256 hash to view its on-chain record, issuer trust status, and any attached credential evidence. No wallet required.",
-  alternates: { canonical: "/proof" },
-};
 import { SiteFooter } from "@/components/layout/site-footer";
 import { JsonLd } from "@/components/ui/json-ld";
 import { ProofIndexForm } from "@/components/proof/proof-index-form";
 import { DEFAULT_SAMPLE_PROOF_HASH } from "@/lib/demo-data";
 import { getRecentProofHashes } from "@/lib/events";
 import { appConfig } from "@/lib/config";
+import { buildPageMetadata, seoCanonicalUrl } from "@/lib/seo";
+
+export const metadata: Metadata = buildPageMetadata({
+  path: "/proof",
+  title: "Look Up a Certificate",
+  description:
+    "Paste a SHA-256 hash to view its on-chain record, issuer trust status, and any attached credential evidence. No wallet required.",
+  keywords:
+    "stellar proof lookup, certificate lookup, hash verification, on-chain certificate, proof verification",
+});
 
 export default async function ProofIndex() {
   let sampleHashes = [DEFAULT_SAMPLE_PROOF_HASH];
@@ -33,13 +36,13 @@ export default async function ProofIndex() {
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "Look Up a Certificate",
-          url: "https://stellaroid.tech/proof",
+          url: seoCanonicalUrl("/proof"),
           description:
             "Paste a SHA-256 hash to view its on-chain record, issuer trust status, and any attached credential evidence.",
           isPartOf: {
             "@type": "WebApplication",
             name: "Stellaroid Earn",
-            url: "https://stellaroid.tech",
+            url: seoCanonicalUrl("/"),
           },
         }}
       />
@@ -52,13 +55,13 @@ export default async function ProofIndex() {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: "https://stellaroid.tech",
+              item: seoCanonicalUrl("/"),
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "Look Up a Certificate",
-              item: "https://stellaroid.tech/proof",
+              item: seoCanonicalUrl("/proof"),
             },
           ],
         }}

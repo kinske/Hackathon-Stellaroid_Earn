@@ -13,6 +13,11 @@ import {
 import { getProofMetadataForCertificate } from "@/lib/proof-metadata";
 import { getProofSocialMetadata } from "@/lib/proof-claims";
 import type { IssuerRecord } from "@/lib/types";
+import { buildPageMetadata, normalizeSeoPath, seoCanonicalUrl } from "@/lib/seo";
+import {
+  buildProofArticleSchema,
+  buildProofDigitalDocumentSchema,
+} from "@/lib/schema";
 import { ProofCard } from "@/components/proof/proof-card";
 import { SiteNav } from "@/components/layout/site-nav";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -22,7 +27,7 @@ import { JsonLd } from "@/components/ui/json-ld";
 // 404 with no RPC call, protecting against hash-enumeration flooding.
 const HASH_RE = /^[0-9a-f]{64}$/i;
 
-const BASE_URL = "https://stellaroid.tech";
+const BASE_URL = seoCanonicalUrl("/");
 
 interface PageProps {
   params: Promise<{ hash: string }>;
@@ -32,7 +37,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { hash } = await params;
-  const proofUrl = `${BASE_URL}/proof/${hash}`;
+  const proofPath = normalizeSeoPath(`/proof/${hash}`);
   let cert: CertificateRecord | null = null;
   if (HASH_RE.test(hash)) {
     try {
@@ -43,24 +48,13 @@ export async function generateMetadata({
   }
   const { title, description } = getProofSocialMetadata(hash, cert);
 
-  return {
+  return buildPageMetadata({
+    path: proofPath,
     title,
     description,
-    alternates: {
-      canonical: proofUrl,
-    },
-    openGraph: {
-      title,
-      description,
-      type: "article",
-      url: proofUrl,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-    },
-  };
+    openGraphType: "article",
+    keywords: `${title}, ${description}`,
+  });
 }
 
 export default async function ProofPage({ params }: PageProps) {
@@ -92,6 +86,16 @@ export default async function ProofPage({ params }: PageProps) {
   }
 
   const proofMetadata = await getProofMetadataForCertificate(hash, cert);
+  const proofDocumentJsonLd = buildProofDigitalDocumentSchema({
+    hash,
+    cert,
+    proofMetadata,
+  });
+  const proofArticleJsonLd = buildProofArticleSchema({
+    hash,
+    cert,
+    proofMetadata,
+  });
 
   return (
     <>
@@ -121,19 +125,8 @@ export default async function ProofPage({ params }: PageProps) {
           ],
         }}
       />
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "DigitalDocument",
-          name: proofMetadata?.title ?? `Proof of Work · ${short}`,
-          description:
-            proofMetadata?.description ??
-            "Verified, on-chain proof of completed work. Anchored on Stellar with SHA-256. Paid atomically on verification.",
-          identifier: hash,
-          url: `${BASE_URL}/proof/${hash}`,
-          keywords: proofMetadata?.skills,
-        }}
-      />
+      <JsonLd data={proofDocumentJsonLd} />
+      {proofArticleJsonLd ? <JsonLd data={proofArticleJsonLd} /> : null}
       <SiteNav />
       <main
         id="main"

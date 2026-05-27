@@ -14,6 +14,7 @@ import {
 import { appConfig } from "@/lib/config";
 import { shortenAddress } from "@/lib/format";
 import { getProofMetadataForCertificate } from "@/lib/proof-metadata";
+import { buildPageMetadata, normalizeSeoPath } from "@/lib/seo";
 import type { IssuerRecord } from "@/lib/types";
 
 const HASH_RE = /^[0-9a-f]{64}$/i;
@@ -28,10 +29,13 @@ export async function generateMetadata({
   const { hash } = await params;
   const short =
     hash.length > 16 ? `${hash.slice(0, 8)}…${hash.slice(-8)}` : hash;
-  return {
+  return buildPageMetadata({
+    path: normalizeSeoPath(`/proof/${hash}/embed`),
     title: `Proof ${short} - embed`,
+    description: `Compact badge embed for on-chain proof ${short}.`,
     robots: { index: false, follow: false },
-  };
+    openGraphType: "article",
+  });
 }
 
 export default async function EmbedProof({ params }: PageProps) {

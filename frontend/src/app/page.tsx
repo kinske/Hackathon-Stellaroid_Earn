@@ -3,13 +3,16 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { appConfig } from "@/lib/config";
 import { shortenAddress } from "@/lib/format";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/",
   title: "Stellaroid Earn — Proof & Payment on Stellar",
   description:
     "Bind certificate hashes on-chain, verify credentials, and pay graduates directly on Stellar testnet.",
-  alternates: { canonical: "/" },
-};
+  keywords:
+    "stellar, soroban, credential verification, on-chain payroll, proof of work, bootcamp, talent hiring",
+});
 import { ActivitySnackbar } from "@/components/activity/activity-snackbar";
 import { RecentActivity } from "@/components/activity/recent-activity";
 import { SiteNav } from "@/components/layout/site-nav";

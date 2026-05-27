@@ -1,8 +1,15 @@
 import { expect, test } from "@playwright/test";
+import type { Page } from "@playwright/test";
 
 const SAMPLE_PROOF_HASH =
   "c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3";
 const SAMPLE_PROOF_URL = `https://stellaroid.tech/proof/${SAMPLE_PROOF_HASH}`;
+
+async function getJsonLd(page: Page) {
+  return page.locator('script[type="application/ld+json"]').evaluateAll((nodes) =>
+    nodes.map((node) => JSON.parse(node.textContent || "{}")),
+  );
+}
 
 test("proof pages expose a canonical Open Graph URL", async ({ page }) => {
   await page.goto(`/proof/${SAMPLE_PROOF_HASH}`);
@@ -19,6 +26,38 @@ test("proof pages expose a canonical Open Graph URL", async ({ page }) => {
     "content",
     /\/proof\/c02ce1602d5bbb6ddfe93c6603d7f4e3dae3b2fb571ea4e70669ccd5a359aea3\/opengraph-image/,
   );
+});
+
+test("about page exposes product software structured data", async ({ page }) => {
+  await page.goto("/about");
+
+  const schemas = await getJsonLd(page);
+  const product = schemas.find((schema) => {
+    const type = schema["@type"];
+    return Array.isArray(type) && type.includes("Product") && type.includes("SoftwareApplication");
+  });
+
+  expect(product).toBeTruthy();
+  expect(product.url).toBe("https://stellaroid.tech/about");
+  expect(product.creator.name).toBe("Mark Siazon");
+  expect(product.offers.price).toBe("0");
+  expect(product.aggregateRating).toBeUndefined();
+  expect(product.review).toBeUndefined();
+});
+
+test("sample proof page exposes article structured data linked to the credential document", async ({ page }) => {
+  await page.goto(`/proof/${SAMPLE_PROOF_HASH}`);
+
+  const schemas = await getJsonLd(page);
+  const article = schemas.find((schema) => schema["@type"] === "Article");
+  const document = schemas.find((schema) => schema["@type"] === "DigitalDocument");
+
+  expect(article).toBeTruthy();
+  expect(document).toBeTruthy();
+  expect(article.mainEntityOfPage["@id"]).toBe(SAMPLE_PROOF_URL);
+  expect(article.image).toBe(`${SAMPLE_PROOF_URL}/opengraph-image`);
+  expect(article.author.name).toBe("Mark Siazon");
+  expect(article.about.identifier).toBe(SAMPLE_PROOF_HASH);
 });
 
 test("proof Open Graph image renders as png", async ({ page, request }) => {
@@ -49,5 +88,11 @@ test("unknown proof hashes do not get verified social claims", async ({ page }) 
     "content",
     /Payment settled|Verified, on-chain proof/i,
   );
+  const schemas = await getJsonLd(page);
+  const article = schemas.find((schema) => schema["@type"] === "Article");
+  const serializedSchemas = JSON.stringify(schemas);
+
+  expect(article).toBeUndefined();
+  expect(serializedSchemas).not.toMatch(/Payment settled|Verified, on-chain proof|Paid atomically/i);
   await expect(page.getByText("No record for this hash yet.")).toBeVisible();
 });

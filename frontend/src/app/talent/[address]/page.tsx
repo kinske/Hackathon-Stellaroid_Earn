@@ -4,6 +4,7 @@ import { SiteNav } from "@/components/layout/site-nav";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { TalentPassport } from "@/components/talent/talent-passport";
 import { shortenAddress } from "@/lib/format";
+import { buildPageMetadata, normalizeSeoPath } from "@/lib/seo";
 
 const STELLAR_ADDRESS_RE = /^G[A-Z2-7]{55}$/;
 
@@ -13,11 +14,18 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { address } = await params;
+  const safePath = normalizeSeoPath(`/talent/${address}`);
   const short = shortenAddress(address, 6);
-  return {
+  return buildPageMetadata({
+    path: safePath,
     title: `Talent · ${short} · Stellaroid Earn`,
     description: `Candidate passport for ${short} on Stellar testnet.`,
-  };
+    openGraphType: "profile",
+    robots: {
+      index: false,
+      follow: false,
+    },
+  });
 }
 
 export default async function TalentPage({ params }: PageProps) {

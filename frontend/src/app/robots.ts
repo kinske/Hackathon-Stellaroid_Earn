@@ -1,16 +1,18 @@
 import type { MetadataRoute } from "next";
+import { seoCanonicalUrl } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      // Block crawlers from spidering the dynamic /proof/<hash> pages.
-      // The static /proof lookup form (no trailing slash) stays crawlable.
-      // Individual proof URLs are 64-char hex hashes — useless to index and
-      // expensive to render if a bot spiders them at scale.
-      disallow: "/proof/",
+      // Block non-public and non-user-facing routes, and keep embed pages out
+      // of search indexing.
+      // The proof detail pages are intentionally left crawlable for portfolio
+      // sharing and direct lookup, while `/proof/<hash>/embed` is kept noindex
+      // at the page level.
+      disallow: ["/proof/*/embed", "/talent/*", "/opportunity/*", "/metrics", "/status", "/api/"],
     },
-    sitemap: "https://stellaroid.tech/sitemap.xml",
+    sitemap: `${seoCanonicalUrl("")}/sitemap.xml`,
   };
 }

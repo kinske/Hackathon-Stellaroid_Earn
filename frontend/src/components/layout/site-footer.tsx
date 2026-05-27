@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Globe } from "lucide-react";
 import { appConfig } from "@/lib/config";
 import { FooterTagline } from "@/components/layout/footer-tagline";
 import { LocaleToggle } from "@/components/layout/locale-toggle";
@@ -119,17 +119,13 @@ export function SiteFooter() {
           </span>
           <div className="flex items-center gap-4 flex-wrap">
             <a
-              href="https://www.linkedin.com/in/mark-siazon/"
+              href="https://marksiazon.dev"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 py-1 text-xs text-text-muted hover:text-primary transition-colors no-underline"
             >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="shrink-0">
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                <rect x="2" y="9" width="4" height="12"/>
-                <circle cx="4" cy="4" r="2"/>
-              </svg>
-              Developed by Mark Siazon
+              <Globe className="w-3 h-3 opacity-70" aria-hidden="true" />
+              Solo developed by Mark Siazon
               <span className="visually-hidden"> (opens in new tab)</span>
             </a>
             <span className="font-pixel text-[10px] text-text-muted/70 uppercase tracking-widest select-none" aria-hidden="true">

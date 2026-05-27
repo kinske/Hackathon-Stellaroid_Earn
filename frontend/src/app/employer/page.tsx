@@ -4,12 +4,14 @@ import { RpcStatusPill } from "@/components/layout/rpc-status-pill";
 import { WalletConnectButton } from "@/components/wallet/wallet-connect-button";
 import { EmployerOpportunityForm } from "@/components/employer/employer-opportunity-form";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/employer",
   title: "Employer · Stellaroid Earn",
   description:
     "Create and fund escrowed paid trials for verified candidates on Stellar testnet.",
-};
+});
 
 interface EmployerPageProps {
   searchParams?: Promise<{

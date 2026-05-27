@@ -1,16 +1,36 @@
-const BASE_URL = "https://stellaroid.tech";
+import { seoCanonicalUrl } from "@/lib/seo";
+import { DEFAULT_SAMPLE_PROOF_HASH } from "@/lib/demo-data";
 
-const routes = [
+type ChangeFrequency = "weekly" | "monthly" | "daily";
+
+type SitemapRoute = {
+  path: string;
+  changeFrequency: ChangeFrequency;
+  priority: number;
+};
+
+const HASH_RE = /^[0-9a-f]{64}$/i;
+
+const sampleProofRoute: SitemapRoute | null = HASH_RE.test(DEFAULT_SAMPLE_PROOF_HASH)
+  ? { path: `/proof/${DEFAULT_SAMPLE_PROOF_HASH}`, changeFrequency: "monthly", priority: 0.7 }
+  : null;
+
+const routes: SitemapRoute[] = [
   { path: "/", changeFrequency: "weekly", priority: 1 },
   { path: "/app", changeFrequency: "weekly", priority: 0.9 },
   { path: "/proof", changeFrequency: "monthly", priority: 0.7 },
   { path: "/about", changeFrequency: "monthly", priority: 0.6 },
   { path: "/issuer", changeFrequency: "monthly", priority: 0.7 },
   { path: "/issuer/register", changeFrequency: "monthly", priority: 0.5 },
-  { path: "/metrics", changeFrequency: "daily", priority: 0.6 },
-  { path: "/status", changeFrequency: "daily", priority: 0.6 },
+  { path: "/employer", changeFrequency: "monthly", priority: 0.6 },
+  // Public pages intentionally kept out of /status and /metrics: robots meta
+  // explicitly marks those routes noindex.
   { path: "/slides", changeFrequency: "monthly", priority: 0.4 },
-] as const;
+];
+
+if (sampleProofRoute) {
+  routes.push(sampleProofRoute);
+}
 
 function escapeXml(value: string) {
   return value
@@ -28,7 +48,7 @@ export function GET() {
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...routes.map(
       ({ path, changeFrequency, priority }) => `  <url>
-    <loc>${escapeXml(`${BASE_URL}${path}`)}</loc>
+    <loc>${escapeXml(seoCanonicalUrl(path))}</loc>
     <lastmod>${lastModified}</lastmod>
     <changefreq>${changeFrequency}</changefreq>
     <priority>${priority}</priority>

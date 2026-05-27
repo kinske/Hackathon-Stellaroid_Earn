@@ -1,4 +1,14 @@
 import type { ProofMetadata } from "./types";
+import {
+  resolveCanonicalConfig as resolveCanonicalConfigFromSeo,
+  SITE_CANONICAL_ORIGIN,
+} from "./seo.ts";
+
+export const resolveCanonicalConfig = resolveCanonicalConfigFromSeo;
+
+const canonicalConfig = resolveCanonicalConfig(process.env.NEXT_PUBLIC_CANONICAL_URL);
+const canonicalUrl = canonicalConfig.url;
+const canonicalOrigin = SITE_CANONICAL_ORIGIN;
 
 const MAX_TEXT = {
   title: 140,
@@ -71,8 +81,8 @@ export function isSafeInternalHref(value: string): boolean {
     return false;
   }
   try {
-    const url = new URL(value, "https://stellaroid.tech");
-    return url.origin === "https://stellaroid.tech" && url.pathname.startsWith("/");
+    const url = new URL(value, canonicalUrl);
+    return url.origin === canonicalOrigin && url.pathname.startsWith("/");
   } catch {
     return false;
   }

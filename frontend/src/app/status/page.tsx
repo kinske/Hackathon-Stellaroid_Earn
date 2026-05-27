@@ -7,19 +7,24 @@ import { DEFAULT_SAMPLE_PROOF_HASH } from "@/lib/demo-data";
 import { appConfig } from "@/lib/config";
 import { getHealthReport, type HealthStatus } from "@/lib/health-report";
 import { shortenAddress } from "@/lib/format";
+import { buildPageMetadata, SITE_CANONICAL_URL } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/status",
   title: "Project Status",
   description:
     "Live demo health, Stellar testnet contract details, domain readiness, and proof links for Stellaroid Earn.",
-  alternates: { canonical: "/status" },
-};
+  robots: {
+    index: false,
+    follow: true,
+  },
+});
 
 const fallbackDemoUrl = "https://stellaroid-earn-demo.vercel.app/";
-const customDomainUrl = "https://stellaroid.tech/";
+const customDomainUrl = SITE_CANONICAL_URL;
 
 const statusTone: Record<HealthStatus, string> = {
   healthy: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",

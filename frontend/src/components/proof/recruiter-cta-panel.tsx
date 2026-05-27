@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { appConfig } from "@/lib/config";
+import { seoCanonicalUrl } from "@/lib/seo";
 import { CopyButton } from "@/components/ui/copy-button";
 
 interface RecruiterCtaPanelProps {
@@ -10,7 +11,7 @@ interface RecruiterCtaPanelProps {
 }
 
 export function RecruiterCtaPanel({ hash, candidateAddress }: RecruiterCtaPanelProps) {
-  const proofUrl = `https://stellaroid.tech/proof/${hash}`;
+  const proofUrl = seoCanonicalUrl(`/proof/${hash}`);
   const employerHref = candidateAddress
     ? `/employer?hash=${encodeURIComponent(hash)}&candidate=${encodeURIComponent(candidateAddress)}`
     : `/employer?hash=${encodeURIComponent(hash)}`;

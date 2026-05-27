@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { FreighterWalletProvider } from "@/hooks/use-freighter-wallet";
 import { OpportunityCard } from "@/components/opportunity/opportunity-card";
 import { normalizeOpportunityId } from "@/lib/opportunity-id";
+import { buildPageMetadata, normalizeSeoPath } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -15,10 +16,19 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  return {
+  const safePath = normalizeSeoPath(`/opportunity/${id}`);
+  return buildPageMetadata({
+    path: safePath,
     title: `Opportunity #${id} · Stellaroid Earn`,
     description: "Escrowed paid trial on Stellar testnet.",
-  };
+    keywords:
+      "stellar opportunity, escrowed trial, talent hiring, Stellar testnet, paid bootcamp work",
+    openGraphType: "article",
+    robots: {
+      index: false,
+      follow: false,
+    },
+  });
 }
 
 export default async function OpportunityPage({ params }: PageProps) {

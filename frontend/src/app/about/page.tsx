@@ -10,17 +10,17 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { CopyButton } from "@/components/ui/copy-button";
 import { Badge } from "@/components/ui/badge";
 import { JsonLd } from "@/components/ui/json-ld";
+import { buildPageMetadata, seoCanonicalUrl, SITE_CANONICAL_URL, SITE_NAME } from "@/lib/seo";
+import { buildAboutSoftwareProductSchema } from "@/lib/schema";
 import { LocalizedAboutCopy } from "@/components/about/localized-about-copy";
 import { StatCard } from "@/components/about/stat-dialog";
 
-export const metadata: Metadata = {
-  title: "About",
+export const metadata: Metadata = buildPageMetadata({
+  path: "/about",
+  title: "About Stellaroid Earn",
   description:
     "Why Stellaroid Earn exists: certificates should be verifiable in seconds, not emails, and trusted verification should unlock payment in the same flow.",
-  alternates: { canonical: "/about" },
-};
-
-const BASE_URL = "https://stellaroid.tech";
+});
 
 const aboutBreadcrumbJsonLd = {
   "@context": "https://schema.org",
@@ -30,13 +30,13 @@ const aboutBreadcrumbJsonLd = {
       "@type": "ListItem",
       position: 1,
       name: "Home",
-      item: BASE_URL,
+      item: SITE_CANONICAL_URL,
     },
     {
       "@type": "ListItem",
       position: 2,
       name: "About",
-      item: `${BASE_URL}/about`,
+      item: `${SITE_CANONICAL_URL}/about`,
     },
   ],
 };
@@ -45,15 +45,17 @@ const aboutJsonLd = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
   name: "About | Stellaroid Earn",
-  url: `${BASE_URL}/about`,
+  url: seoCanonicalUrl("/about"),
   description:
     "A thin piece of software around one idea: certificates should be verifiable in seconds, not emails. Once a trusted issuer verifies them, the grad should get paid in the same flow.",
   isPartOf: {
     "@type": "WebApplication",
-    name: "Stellaroid Earn",
-    url: BASE_URL,
+    name: SITE_NAME,
+    url: SITE_CANONICAL_URL,
   },
 };
+
+const aboutSoftwareProductJsonLd = buildAboutSoftwareProductSchema();
 
 const stack = [
   {
@@ -518,6 +520,7 @@ export default function About() {
   return (
     <>
       <JsonLd data={aboutJsonLd} />
+      <JsonLd data={aboutSoftwareProductJsonLd} />
       <JsonLd data={aboutBreadcrumbJsonLd} />
       <div className="min-h-dvh">
         <SiteNav />
@@ -536,6 +539,9 @@ export default function About() {
               id="lede"
               className="text-base sm:text-lg text-text-muted max-w-160 mx-auto mb-8 leading-[1.55]"
             />
+            <p className="text-sm text-text-muted max-w-140 mx-auto mb-8 leading-relaxed">
+              Free public Stellar testnet demo. No purchase, subscription, or mainnet funds required.
+            </p>
           </section>
 
           <ActivitySnackbar>

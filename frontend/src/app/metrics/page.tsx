@@ -1,12 +1,20 @@
 import { getRecentEvents } from "@/lib/events";
 import { appConfig } from "@/lib/config";
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/metrics",
   title: "Metrics",
-  description: "Live on-chain activity metrics for Stellaroid Earn - events, proofs, transactions, and payment stats from Stellar testnet.",
-  alternates: { canonical: "/metrics" },
-};
+  description:
+    "Live on-chain activity metrics for Stellaroid Earn: events, proofs, transactions, and payment stats from Stellar testnet.",
+  keywords:
+    "stellar testnet metrics, on-chain events, proof stats, contract activity, xp payments",
+  robots: {
+    index: false,
+    follow: true,
+  },
+});
 
 export const revalidate = 30;
 

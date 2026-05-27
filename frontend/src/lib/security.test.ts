@@ -4,6 +4,7 @@ import {
   isE2EModeAllowed,
   isSafeExternalHttpUrl,
   isSafeInternalHref,
+  resolveCanonicalConfig,
   sanitizeProofMetadata,
 } from "./security.ts";
 
@@ -23,6 +24,12 @@ test("safe URL helpers reject script, data, localhost, and private-network URLs"
   assert.equal(isSafeInternalHref("proof/abc"), false);
   assert.equal(isSafeInternalHref("//evil.test/path"), false);
   assert.equal(isSafeInternalHref("/\\evil"), false);
+});
+
+test("resolveCanonicalConfig returns safe canonical origin fallback for malformed URL", () => {
+  const fallback = resolveCanonicalConfig("not-a-url");
+  assert.equal(fallback.url, "https://stellaroid.tech");
+  assert.equal(fallback.origin, "https://stellaroid.tech");
 });
 
 test("sanitizeProofMetadata drops unsafe evidence links and bounds arrays", () => {

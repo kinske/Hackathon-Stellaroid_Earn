@@ -4,13 +4,14 @@ import {
 } from "@/hooks/use-freighter-wallet";
 import { IssuerDashboard } from "@/components/issuer/issuer-dashboard";
 import { JsonLd } from "@/components/ui/json-ld";
+import { buildPageMetadata, seoCanonicalUrl, SITE_CANONICAL_URL, SITE_NAME } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: "/issuer",
   title: "Issuer",
   description:
     "Inspect or register an issuer wallet in the new on-chain trust registry for Stellaroid Earn.",
-  alternates: { canonical: "/issuer" },
-};
+});
 
 export default function IssuerPage() {
   return (
@@ -20,13 +21,13 @@ export default function IssuerPage() {
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "Issuer Dashboard",
-          url: "https://stellaroid.tech/issuer",
+          url: seoCanonicalUrl("/issuer"),
           description:
             "Inspect or register an issuer wallet in the on-chain trust registry for Stellaroid Earn.",
           isPartOf: {
             "@type": "WebApplication",
-            name: "Stellaroid Earn",
-            url: "https://stellaroid.tech",
+            name: SITE_NAME,
+            url: SITE_CANONICAL_URL,
           },
         }}
       />
@@ -39,13 +40,13 @@ export default function IssuerPage() {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: "https://stellaroid.tech",
+              item: SITE_CANONICAL_URL,
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "Issuer",
-              item: "https://stellaroid.tech/issuer",
+              item: seoCanonicalUrl("/issuer"),
             },
           ],
         }}

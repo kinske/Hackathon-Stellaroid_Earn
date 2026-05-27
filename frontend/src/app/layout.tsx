@@ -7,6 +7,15 @@ import { JsonLd } from "@/components/ui/json-ld";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import "../styles/globals.css";
 import { cn } from "@/lib/utils";
+import {
+  SITE_AUTHOR_LINKEDIN,
+  SITE_AUTHOR_NAME,
+  SITE_AUTHOR_URL,
+  SITE_CANONICAL_URL,
+  SITE_DESCRIPTION,
+  SITE_KEYWORDS,
+  SITE_NAME,
+} from "@/lib/seo";
 
 const orbitron = Orbitron({
   subsets: ["latin"],
@@ -36,7 +45,7 @@ const shareTechMono = Share_Tech_Mono({
   display: "swap",
 });
 
-const BASE_URL = "https://stellaroid.tech";
+const BASE_URL = SITE_CANONICAL_URL;
 
 export const viewport: Viewport = {
   themeColor: "#f59e0b",
@@ -48,9 +57,11 @@ export const metadata: Metadata = {
     default: "Stellaroid Earn",
     template: "%s | Stellaroid Earn",
   },
-  description:
-    "Stellaroid Earn links proof and payment on Stellar so teams can check the record and pay with confidence.",
-  alternates: { canonical: BASE_URL },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_AUTHOR_NAME, url: SITE_AUTHOR_URL }],
+  keywords: SITE_KEYWORDS,
+  alternates: { canonical: "/" },
   icons: {
     icon: [
       { url: "/favicon.png", type: "image/png", sizes: "32x32" },
@@ -61,17 +72,26 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: "/",
+    url: BASE_URL,
     siteName: "Stellaroid Earn",
     title: "Stellaroid Earn",
-    description: "Check the record and pay with confidence on Stellar.",
+    description: SITE_DESCRIPTION,
     locale: "en_US",
     alternateLocale: "tl_PH",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Stellaroid Earn",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Stellaroid Earn",
-    description: "Check the record and pay with confidence on Stellar.",
+    description: SITE_DESCRIPTION,
+    images: ["/opengraph-image"],
   },
 };
 
@@ -81,6 +101,12 @@ const webAppJsonLd = [
     "@type": "WebApplication",
     name: "Stellaroid Earn",
     url: BASE_URL,
+    creator: {
+      "@type": "Person",
+      name: SITE_AUTHOR_NAME,
+      url: SITE_AUTHOR_URL,
+      sameAs: [SITE_AUTHOR_URL, SITE_AUTHOR_LINKEDIN],
+    },
     description:
       "Stellaroid Earn links proof and payment on Stellar for certificates, completed work, and milestone approvals.",
     applicationCategory: "FinanceApplication",
@@ -91,8 +117,28 @@ const webAppJsonLd = [
     "@type": "Organization",
     name: "Stellaroid Earn",
     url: BASE_URL,
+    founder: {
+      "@type": "Person",
+      name: SITE_AUTHOR_NAME,
+      url: SITE_AUTHOR_URL,
+    },
   },
 ];
+
+const authorProfileJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE_AUTHOR_NAME,
+  url: SITE_AUTHOR_URL,
+  sameAs: [SITE_AUTHOR_LINKEDIN, SITE_AUTHOR_URL],
+};
+
+const webSiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: BASE_URL,
+};
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
@@ -107,6 +153,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {webAppJsonLd.map((schema, i) => (
           <JsonLd key={i} data={schema} />
         ))}
+        <JsonLd data={webSiteJsonLd} />
+        <JsonLd data={authorProfileJsonLd} />
         {children}
         <ScrollToTop />
         <Analytics />
