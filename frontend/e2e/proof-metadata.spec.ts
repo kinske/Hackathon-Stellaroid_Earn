@@ -74,6 +74,14 @@ test("proof Open Graph image renders as png", async ({ page, request }) => {
   expect(response.headers()["content-type"]).toContain("image/png");
 });
 
+test("proof QR route renders as svg", async ({ request }) => {
+  const response = await request.get(`/proof/${SAMPLE_PROOF_HASH}/qr`);
+
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("image/svg+xml");
+  expect(await response.text()).toContain("<svg");
+});
+
 test("unknown proof hashes do not get verified social claims", async ({ page }) => {
   const unknown =
     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
