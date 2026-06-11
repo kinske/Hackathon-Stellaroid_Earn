@@ -41,6 +41,7 @@ export function SiteFooter() {
           <div className="flex flex-col gap-4 max-w-[280px] lg:shrink-0">
             <Link
               href="/"
+              prefetch={false}
               aria-label="Stellaroid Earn — home"
               className="inline-flex items-center gap-2.5 no-underline hover:opacity-80 transition-opacity w-fit"
             >
@@ -58,14 +59,14 @@ export function SiteFooter() {
             {/* Site */}
             <nav aria-label="Site links" className="flex flex-col text-[13px]">
               <h2 className="font-pixel text-[11px] font-medium text-text-muted uppercase tracking-widest mb-3">Site</h2>
-              <Link href="/"       className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Home</Link>
-              <Link href="/app"        className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">App</Link>
-              <Link href="/proof"      className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Verify</Link>
-              <Link href="/issuer"     className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Issuer</Link>
-              <Link href="/about"      className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">About</Link>
-              <Link href="/employer"   className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Employer</Link>
-              <Link href="/pilot"      className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Pilot</Link>
-              <Link href="/status"     className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Status</Link>
+              <Link href="/" prefetch={false} className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Home</Link>
+              <Link href="/app" prefetch={false} className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">App</Link>
+              <Link href="/proof" prefetch={false} className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Verify</Link>
+              <Link href="/issuer" prefetch={false} className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Issuer</Link>
+              <Link href="/about" prefetch={false} className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">About</Link>
+              <Link href="/employer" prefetch={false} className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Employer</Link>
+              <Link href="/pilot" prefetch={false} className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Pilot</Link>
+              <Link href="/status" prefetch={false} className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Status</Link>
             </nav>
 
             {/* On-chain */}
@@ -86,8 +87,8 @@ export function SiteFooter() {
                 <span className="visually-hidden"> (opens in new tab)</span>
                 <ExternalLink className="w-3 h-3 shrink-0 opacity-50" aria-hidden="true" />
               </a>
-              <Link href="/metrics" className="py-1.5 text-text-muted hover:text-primary transition-colors no-underline">Metrics</Link>
-              <Link href="/slides"  className="py-1.5 text-text-muted hover:text-primary transition-colors no-underline">Demo Presentation</Link>
+              <Link href="/metrics" prefetch={false} className="py-1.5 text-text-muted hover:text-primary transition-colors no-underline">Metrics</Link>
+              <Link href="/slides" prefetch={false} className="py-1.5 text-text-muted hover:text-primary transition-colors no-underline">Demo Presentation</Link>
             </nav>
 
             {/* Source */}

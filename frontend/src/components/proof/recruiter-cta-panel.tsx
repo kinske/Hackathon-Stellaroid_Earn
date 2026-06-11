@@ -32,6 +32,7 @@ export function RecruiterCtaPanel({ hash, candidateAddress }: RecruiterCtaPanelP
       <div className="flex gap-3 flex-wrap">
         <Link
           href={employerHref}
+          prefetch={false}
           className="inline-flex items-center px-4 py-2 rounded-md bg-primary text-on-primary font-semibold text-sm no-underline hover:bg-primary-hover transition-colors"
         >
           Fund paid trial
@@ -48,6 +49,7 @@ export function RecruiterCtaPanel({ hash, candidateAddress }: RecruiterCtaPanelP
       {candidateAddress ? (
         <Link
           href={`/talent/${candidateAddress}`}
+          prefetch={false}
           className="text-[0.8125rem] text-accent no-underline hover:underline"
         >
           View candidate passport →

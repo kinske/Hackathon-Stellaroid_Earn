@@ -198,6 +198,7 @@ export function ProofCard({
               {cert && status.canVerify ? (
                 <Link
                   href="/app"
+                  prefetch={false}
                   className="inline-flex mt-2 text-accent text-[0.8125rem] font-semibold hover:underline no-underline"
                 >
                   Open trusted verification flow →
@@ -242,6 +243,7 @@ export function ProofCard({
             </p>
             <Link
               href="/proof"
+              prefetch={false}
               className="mt-3 inline-flex items-center px-4 py-2 rounded-md bg-primary text-on-primary font-semibold text-sm no-underline hover:bg-primary-hover transition-colors"
             >
               Look up another hash →

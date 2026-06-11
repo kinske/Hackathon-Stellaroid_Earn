@@ -55,6 +55,7 @@ export function SiteNav() {
           {/* Brand */}
           <Link
             href="/"
+            prefetch={false}
             className="inline-flex items-center gap-2.5 text-text no-underline font-bold text-[17px] tracking-[-0.2px] shrink-0 hover:opacity-80 transition-opacity focus-visible:outline-primary"
           >
             <Image src="/logo.svg" alt="" width={28} height={28} />
@@ -67,6 +68,7 @@ export function SiteNav() {
               <Link
                 key={l.href}
                 href={l.href}
+                prefetch={false}
                 className={cn(
                   "no-underline transition-colors focus-visible:outline-primary pb-0.5",
                   isActive(l.href)
@@ -112,6 +114,7 @@ export function SiteNav() {
             <Link
               key={l.href}
               href={l.href}
+              prefetch={false}
               onClick={() => setOpen(false)}
               className={cn(
                 "px-4 py-3.5 text-[17px] border-b border-border no-underline transition-colors",
