@@ -39,6 +39,18 @@ Open http://localhost:3000 with [Freighter](https://www.freighter.app/) installe
 - [x] `/talent/[address]` passport shell route
 - [x] Navigation links added (site-nav + site-footer)
 - [x] `issuer-registry.ts` marked as deprecated display-only fallback
+- [x] Pro-research intake archived under `../docs/spec/stellaroid`
+- [x] `/proof/[hash]/export` employer verification summary route
+- [x] `/pilot` issuer/employer pilot capture route
+
+## Pro-Research Backlog (2026-06-11)
+
+- [ ] Batch issuance: CSV preview, validation, duplicate/hash checks, and signing queue
+- [ ] Expiration/renewal workflow beyond current `expires_at` display handling
+- [ ] Admin trust model: org admin, reviewer, viewer, support roles, and audit logs
+- [ ] Branded proof pages: issuer logo, policy links, custom OG variants, optional issuer domain mapping
+- [ ] Verification analytics: proof views, shares, verification requests, employer actions, and issuer conversion
+- [ ] Standards export: VC 2.0 / Open Badges 3.0 compatible JSON after pilot demand is proven
 
 ## Nice-to-haves (out of scope for bootcamp submission)
 

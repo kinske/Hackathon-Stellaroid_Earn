@@ -32,9 +32,11 @@ The bootcamp/event submission is complete. Stellaroid Earn is now maintained as 
 - **Roadmap:** [`ROADMAP.md`](ROADMAP.md)
 - **Maintenance checks:** [`MAINTENANCE.md`](MAINTENANCE.md)
 - **Custom domain cutover:** [`docs/STELLAROID_TECH_CUTOVER.md`](docs/STELLAROID_TECH_CUTOVER.md)
+- **Pro-research intake:** [`docs/spec/stellaroid/INTAKE-STATUS-2026-06-11.md`](docs/spec/stellaroid/INTAKE-STATUS-2026-06-11.md)
 - **Demo checklist:** [`docs/DEMO_CHECKLIST.md`](docs/DEMO_CHECKLIST.md)
 - **Canonical live URL:** [`stellaroid.tech`](https://stellaroid.tech/)
 - **Operational status route:** [`/status`](https://stellaroid.tech/status)
+- **Pilot intake route:** [`/pilot`](https://stellaroid.tech/pilot)
 
 `www.stellaroid.tech` and `earn.stellaroid.tech` redirect to the canonical apex URL.
 

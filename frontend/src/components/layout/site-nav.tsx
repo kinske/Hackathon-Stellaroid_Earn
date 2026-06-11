@@ -6,7 +6,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Menu, X, GitFork } from "lucide-react";
-import { Button } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -16,6 +15,7 @@ const navLinks = [
   { href: "/issuer", label: "Issuer" },
   { href: "/app", label: "App" },
   { href: "/employer", label: "Employer" },
+  { href: "/pilot", label: "Pilot" },
   { href: "/status", label: "Status" },
 ];
 
@@ -81,14 +81,15 @@ export function SiteNav() {
 
           {/* Right actions */}
           <div className="hidden md:flex items-center gap-2.5 shrink-0">
-            <Button
+            <a
               href="https://github.com/Iron-Mark/Stellar-Bootcamp-2026"
-              variant="outline"
-              size="sm"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-9 items-center justify-center gap-2 rounded-full border border-border-glass bg-transparent px-3 text-[13px] font-semibold text-text no-underline transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:-outline-offset-2"
             >
               <GitFork className="w-3.5 h-3.5" />
               GitHub
-            </Button>
+            </a>
           </div>
 
           {/* Mobile burger */}
@@ -123,10 +124,15 @@ export function SiteNav() {
             </Link>
           ))}
           <div className="mt-3 flex flex-col gap-2">
-            <Button href="https://github.com/Iron-Mark/Stellar-Bootcamp-2026" variant="outline" size="sm">
+            <a
+              href="https://github.com/Iron-Mark/Stellar-Bootcamp-2026"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-border-glass bg-transparent px-4 text-sm font-semibold text-text no-underline transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:-outline-offset-2"
+            >
               <GitFork className="w-3.5 h-3.5" />
               GitHub
-            </Button>
+            </a>
           </div>
         </div>
       )}

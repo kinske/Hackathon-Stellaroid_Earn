@@ -4,10 +4,12 @@ Stellaroid Earn is no longer just a bootcamp submission. The project should stay
 
 ## Current Position
 
-- Live fallback demo: https://stellaroid-earn-demo.vercel.app/
-- Current verified contract: `CA7P5EPYKC2IW4PCMAH6NRBLHH3WP7AN6WWC3QDRWO4HLE47FAGO6TET`
-- Custom domain target: `stellaroid.tech`, not live until DNS passes the cutover runbook.
+- Canonical live demo: https://stellaroid.tech/
+- Fallback demo: https://stellaroid-earn-demo.vercel.app/
+- Current verified contract: `CDMUOHMARNVOJZM3IVOCJUPGBHDTHFBMZCCZXEZPQDVJGILH3NIKTTW3`
+- Domain state: `stellaroid.tech` is the canonical host; `www` and `earn` should redirect to the apex.
 - Product wedge: public credential proof pages plus issuer trust and employer-to-graduate payment flow.
+- Pro-research intake: `docs/spec/stellaroid/INTAKE-STATUS-2026-06-11.md`
 
 ## Phase 1 - Keep It Reliable
 
@@ -21,6 +23,8 @@ Stellaroid Earn is no longer just a bootcamp submission. The project should stay
 
 - Improve issuer onboarding so pending, approved, and suspended states are obvious.
 - Make the employer flow start cleanly from a proof page with hash and candidate context.
+- Keep the proof export route healthy: `/proof/<hash>/export`.
+- Use `/pilot` as the visible capture path for issuer pilots and employer integration requests.
 - Turn candidate pages into honest talent passports, without pretending wallet-wide credential discovery exists before an indexer is built.
 - Keep `/status` current for demo health, contract ID, proof links, and domain state.
 - Document a pilot workflow for one real issuer and a small batch of graduates.
@@ -45,5 +49,5 @@ Stellaroid Earn is no longer just a bootcamp submission. The project should stay
 - No marketplace mechanics.
 - No broad learning platform rebuild.
 - No mainnet deploy from examples.
-- No claim that `stellaroid.tech` is live until DNS and HTTP checks pass.
 - No claim that talent pages automatically discover every wallet credential until an indexer exists.
+- No NFT badge layer before issuer proof, export, admin, and analytics demand is validated.

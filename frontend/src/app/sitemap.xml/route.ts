@@ -23,6 +23,7 @@ const routes: SitemapRoute[] = [
   { path: "/issuer", changeFrequency: "monthly", priority: 0.7 },
   { path: "/issuer/register", changeFrequency: "monthly", priority: 0.5 },
   { path: "/employer", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/pilot", changeFrequency: "monthly", priority: 0.6 },
   // Public pages intentionally kept out of /status and /metrics: robots meta
   // explicitly marks those routes noindex.
   { path: "/slides", changeFrequency: "monthly", priority: 0.4 },

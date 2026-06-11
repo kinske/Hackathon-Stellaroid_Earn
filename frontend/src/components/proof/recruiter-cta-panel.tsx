@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { appConfig } from "@/lib/config";
 import { seoCanonicalUrl } from "@/lib/seo";
@@ -38,6 +36,13 @@ export function RecruiterCtaPanel({ hash, candidateAddress }: RecruiterCtaPanelP
         >
           Fund paid trial
         </Link>
+        <a
+          href={`/proof/${hash}/export`}
+          download
+          className="inline-flex items-center px-4 py-2 rounded-md border border-border bg-surface-2 text-text font-semibold text-sm no-underline hover:border-primary transition-colors"
+        >
+          Download summary
+        </a>
         <CopyButton value={proofUrl} label="Copy proof link" ariaLabel="Copy proof link" />
       </div>
       {candidateAddress ? (

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Copy, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { getProofShareCopy } from "@/lib/proof-claims";
 import type { CertificateStatus } from "@/lib/types";
 
@@ -45,12 +44,15 @@ Built on Stellar + Soroban. #Stellar #Soroban #ProofOfWork`;
     }
   }
 
+  const buttonClass =
+    "inline-flex min-h-9 items-center justify-center gap-2 rounded-full border border-border bg-surface-2 px-3 text-[13px] font-semibold text-text no-underline transition-colors hover:bg-border focus-visible:outline-2 focus-visible:outline-primary focus-visible:-outline-offset-2";
+
   return (
     <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
       {/* Share on X */}
-      <Button
-        variant="secondary"
-        size="sm"
+      <button
+        type="button"
+        className={buttonClass}
         onClick={() => openInNewTab(tweetUrl)}
         aria-label={shareCopy.verified ? "Share verified proof on X (Twitter)" : "Share proof lookup on X (Twitter)"}
       >
@@ -70,12 +72,12 @@ Built on Stellar + Soroban. #Stellar #Soroban #ProofOfWork`;
           />
         </svg>
         Share on X
-      </Button>
+      </button>
 
       {/* Share on LinkedIn */}
-      <Button
-        variant="secondary"
-        size="sm"
+      <button
+        type="button"
+        className={buttonClass}
         onClick={() => openInNewTab(linkedInUrl)}
         aria-label={shareCopy.verified ? "Share verified proof on LinkedIn" : "Share proof lookup on LinkedIn"}
       >
@@ -98,12 +100,12 @@ Built on Stellar + Soroban. #Stellar #Soroban #ProofOfWork`;
           />
         </svg>
         Share on LinkedIn
-      </Button>
+      </button>
 
       {/* Copy share link */}
-      <Button
-        variant="secondary"
-        size="sm"
+      <button
+        type="button"
+        className={buttonClass}
         onClick={handleCopy}
         aria-label="Copy share link"
       >
@@ -113,7 +115,7 @@ Built on Stellar + Soroban. #Stellar #Soroban #ProofOfWork`;
           <Copy width={16} height={16} aria-hidden="true" />
         )}
         {copied ? "Copied ✓" : "Copy share link"}
-      </Button>
+      </button>
     </div>
   );
 }

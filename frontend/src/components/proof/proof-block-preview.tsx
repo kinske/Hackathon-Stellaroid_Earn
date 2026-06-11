@@ -1,5 +1,5 @@
 import { ArrowRight, Lock } from "lucide-react";
-import { Badge } from "@/components/ui";
+import { Badge } from "@/components/ui/badge";
 import { getProofPreviewTitle } from "@/lib/proof-preview";
 import type { CertificateStatus } from "@/lib/types";
 

@@ -64,6 +64,7 @@ export function SiteFooter() {
               <Link href="/issuer"     className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Issuer</Link>
               <Link href="/about"      className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">About</Link>
               <Link href="/employer"   className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Employer</Link>
+              <Link href="/pilot"      className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Pilot</Link>
               <Link href="/status"     className="py-1.5 text-text-muted hover:text-text transition-colors no-underline">Status</Link>
             </nav>
 

@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import { Orbitron, Exo_2, JetBrains_Mono, Share_Tech_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { ToastProvider } from "@/components/ui";
+import { DeferredToastProvider } from "@/components/layout/deferred-toast-provider";
 import { JsonLd } from "@/components/ui/json-ld";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import "../styles/globals.css";
@@ -158,21 +158,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {children}
         <ScrollToTop />
         <Analytics />
-        <ToastProvider
-          theme="dark"
-          position="bottom-right"
-          richColors
-          closeButton
-          toastOptions={{
-            classNames: {
-              toast: "!bg-surface-glass !border-border-glass !backdrop-blur-md !rounded-xl !shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.06)]",
-              title: "!text-text !font-semibold !text-[13px]",
-              description: "!text-text-muted !text-[12px] !leading-relaxed",
-              actionButton: "!bg-primary !text-bg !text-[12px] !font-semibold !rounded-md hover:!bg-primary-hover",
-              closeButton: "!bg-surface-2 !border-border !text-text-muted hover:!text-text",
-            },
-          }}
-        />
+        <DeferredToastProvider />
       </body>
     </html>
   );

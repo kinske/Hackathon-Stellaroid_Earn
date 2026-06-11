@@ -1,10 +1,6 @@
 // frontend/src/components/ui/badge.tsx
-"use client";
-
 import * as React from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { glowPulse } from "@/lib/motion";
 
 const toneClasses: Record<string, string> = {
   neutral: "bg-text-muted/15 text-text-muted border-transparent",
@@ -35,14 +31,14 @@ export function Badge({ tone = "neutral", dot, className, children, ...props }: 
       {...props}
     >
       {dot && (
-        <motion.span
+        <span
           className={cn(
             "w-1.5 h-1.5 rounded-full shrink-0",
             tone === "verified" ? "bg-verified" :
             tone === "primary"  ? "bg-primary"  :
             tone === "accent"   ? "bg-[#C4B5FD]" : "bg-current"
           )}
-          animate={glowPulse.animate}
+          aria-hidden="true"
         />
       )}
       {children}

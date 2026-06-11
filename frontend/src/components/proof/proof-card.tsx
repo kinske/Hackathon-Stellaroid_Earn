@@ -1,7 +1,7 @@
 // Server component — no "use client"
 import Link from "next/link";
 import { Check, ExternalLink } from "lucide-react";
-import { CertificateRecord } from "@/lib/contract-client";
+import type { CertificateRecord } from "@/lib/contract-read-server";
 import { appConfig } from "@/lib/config";
 import { shortenAddress } from "@/lib/format";
 import { lookupIssuer } from "@/lib/issuer-registry";
