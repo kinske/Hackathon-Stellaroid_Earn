@@ -82,6 +82,7 @@ export function CredentialMetadataPanel({
                 <Link
                   key={`${item.label}-${item.href}`}
                   href={item.href}
+                  prefetch={false}
                   className="text-sm text-accent no-underline hover:underline"
                 >
                   {item.label} →
