@@ -40,6 +40,8 @@ The bootcamp/event submission is complete. Stellaroid Earn is now maintained as 
 
 `www.stellaroid.tech` and `earn.stellaroid.tech` redirect to the canonical apex URL.
 
+The public entry flow is organized around three personas: **Issue**, **Verify**, and **Hire**. Employer proof packs are available from verified proof pages and include a recruiter-safe summary plus an unsigned standards-alignment preview for W3C VC 2.0 and Open Badges 3.0 mapping. That preview is not a signed standards credential yet.
+
 ---
 
 ## 30-Second Pitch

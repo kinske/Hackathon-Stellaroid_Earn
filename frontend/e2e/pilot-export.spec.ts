@@ -22,7 +22,7 @@ test("pilot intake page exposes issuer and employer paths", async ({ page }) => 
 test("verified proof exposes an employer summary export", async ({ page, request }) => {
   await page.goto(`/proof/${SAMPLE_PROOF_HASH}`);
 
-  const exportLink = page.getByRole("link", { name: /download summary/i });
+  const exportLink = page.getByRole("link", { name: /download proof pack/i });
   await expect(exportLink).toHaveAttribute("href", `/proof/${SAMPLE_PROOF_HASH}/export`);
 
   const response = await request.get(`/proof/${SAMPLE_PROOF_HASH}/export`);
@@ -37,7 +37,12 @@ test("verified proof exposes an employer summary export", async ({ page, request
   expect(body.trustSummary.status).toBe("verified");
   expect(body.trustSummary.verified).toBe(true);
   expect(body.credential.hash).toBe(SAMPLE_PROOF_HASH);
+  expect(body.standardsAlignment.status).toBe("unsigned_preview");
+  expect(body.standardsAlignment.warning).toContain("not a signed Verifiable Credential");
+  expect(body.standardsAlignment.w3cVerifiableCredential2Preview.type).toContain(
+    "VerifiableCredential",
+  );
   expect(body.recruiterChecklist).toContain(
-    "Use credential.hash as the immutable lookup key in applicant tracking notes.",
+    "Read standardsAlignment.warning before treating this export as a standards credential.",
   );
 });

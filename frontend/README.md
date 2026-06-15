@@ -33,17 +33,21 @@ Open http://localhost:3000. Install [Freighter](https://www.freighter.app/) and 
 
 | Path | Description |
 |------|-------------|
-| `/` | Dashboard — Next Action card + Milestone rail + Register / Verify / Pay forms + Verified Badge preview |
+| `/` | Persona-first landing page with Issue, Verify, and Hire entry paths |
 | `/about` | About page |
 | `/proof` | Proof lookup form — enter any cert hash to check status |
-| `/proof/[hash]` | Public proof page — shareable, no wallet required. Cached 60 s at CDN; invalid hashes return instant 404. Transitional off-chain metadata/evidence can be shown here while the contract still stores trust-critical state only. |
+| `/proof/[hash]` | Public proof page — shareable, no wallet required. Cached 60 s at CDN; invalid hashes return instant 404. Verified proof pages expose an employer proof pack with recruiter summary and unsigned W3C VC 2.0 / Open Badges 3.0 alignment preview. |
+| `/proof/[hash]/export` | JSON employer proof pack. It is useful for recruiters and ATS notes, but the standards preview is unsigned and not a conformant VC/Open Badges credential. |
 | `/proof/[hash]/embed` | Compact iframe embed — for portfolios, Notion, blogs. `frame-ancestors *` CSP allows all hosts. |
 | `/issuer` | Issuer dashboard — wallet-aware issuer status plus admin-only issuer approval/suspension controls |
 | `/issuer/register` | Register the connected wallet as a pending issuer |
+| `/employer` | Employer console for verified-credential paid-trial escrow |
+| `/pilot` | Issuer pilot and employer integration intake |
+| `/status` | Operational status surface for demo health and config checks |
 
 ## Design system
 
-Tokens and global styles live in `src/styles/globals.css`. The palette is dark-first (slate-900 background) with a gold primary (`--color-primary: #F59E0B`), purple accent, and IBM Plex Sans / IBM Plex Mono typography. All spacing, radii, and transitions are CSS custom properties — no utility framework. A `prefers-reduced-motion` media query zeroes all animation durations globally.
+Tokens and global styles live in `src/styles/globals.css`. The palette is dark-first (slate-900 background) with a gold primary (`--color-primary: #F59E0B`), purple accent, and tokenized font families for heading, body, mono, and pixel labels. Tailwind v4 utilities consume these tokens. A `prefers-reduced-motion` media query zeroes all animation durations globally.
 
 ## Layout
 

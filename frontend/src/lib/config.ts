@@ -1,5 +1,5 @@
 import { Networks } from "@stellar/stellar-sdk";
-import { isE2EModeAllowed } from "@/lib/security";
+import { isE2EModeAllowed } from "./security.ts";
 
 const TESTNET_PASSPHRASE = "Test SDF Network ; September 2015";
 

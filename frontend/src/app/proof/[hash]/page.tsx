@@ -128,10 +128,7 @@ export default async function ProofPage({ params }: PageProps) {
       <JsonLd data={proofDocumentJsonLd} />
       {proofArticleJsonLd ? <JsonLd data={proofArticleJsonLd} /> : null}
       <SiteNav />
-      <main
-        id="main"
-        style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}
-      >
+      <main id="main" className="mx-auto max-w-[900px] px-6 py-12">
         <ProofCard
           hash={hash}
           cert={cert}

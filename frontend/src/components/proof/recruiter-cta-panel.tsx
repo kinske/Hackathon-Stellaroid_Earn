@@ -33,16 +33,16 @@ export function RecruiterCtaPanel({ hash, candidateAddress }: RecruiterCtaPanelP
         <Link
           href={employerHref}
           prefetch={false}
-          className="inline-flex items-center px-4 py-2 rounded-md bg-primary text-on-primary font-semibold text-sm no-underline hover:bg-primary-hover transition-colors"
+          className="inline-flex min-h-11 items-center px-4 py-2 rounded-md bg-primary text-on-primary font-semibold text-sm no-underline hover:bg-primary-hover transition-colors"
         >
           Fund paid trial
         </Link>
         <a
           href={`/proof/${hash}/export`}
           download
-          className="inline-flex items-center px-4 py-2 rounded-md border border-border bg-surface-2 text-text font-semibold text-sm no-underline hover:border-primary transition-colors"
+          className="inline-flex min-h-11 items-center px-4 py-2 rounded-md border border-border bg-surface-2 text-text font-semibold text-sm no-underline hover:border-primary transition-colors"
         >
-          Download summary
+          Download proof pack
         </a>
         <CopyButton value={proofUrl} label="Copy proof link" ariaLabel="Copy proof link" />
       </div>

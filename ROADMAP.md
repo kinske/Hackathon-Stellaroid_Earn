@@ -23,7 +23,7 @@ Stellaroid Earn is no longer just a bootcamp submission. The project should stay
 
 - Improve issuer onboarding so pending, approved, and suspended states are obvious.
 - Make the employer flow start cleanly from a proof page with hash and candidate context.
-- Keep the proof export route healthy: `/proof/<hash>/export`.
+- Keep the proof export route healthy: `/proof/<hash>/export`, including the recruiter-safe summary and unsigned standards-alignment preview.
 - Use `/pilot` as the visible capture path for issuer pilots and employer integration requests.
 - Turn candidate pages into honest talent passports, without pretending wallet-wide credential discovery exists before an indexer is built.
 - Keep `/status` current for demo health, contract ID, proof links, and domain state.
@@ -40,6 +40,7 @@ Stellaroid Earn is no longer just a bootcamp submission. The project should stay
 
 - Mainnet: only after issuer workflow, key custody, privacy, support, and revocation policy are written down.
 - Metadata hosting: use stable HTTPS JSON first; add pinning/storage only when the issuer workflow needs it.
+- Standards export: keep the current VC/Open Badges mapping as an unsigned preview until issuer signing, holder consent, verification methods, and revocation/status policy are designed.
 - Indexing: add only when candidate passports must list credentials automatically.
 - NFT badge layer: optional presentation layer only. The credential source of truth should remain the Stellar proof record.
 - Payments: keep XLM on testnet for the demo; treat USDC or production payment rails as a separate compliance decision.
