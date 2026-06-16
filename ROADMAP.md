@@ -21,11 +21,11 @@ Stellaroid Earn is no longer just a bootcamp submission. The project should stay
 
 ## Phase 2 - Make It Useful After The Event
 
-- Improve issuer onboarding so pending, approved, and suspended states are obvious.
-- Make the employer flow start cleanly from a proof page with hash and candidate context.
+- Keep issuer onboarding explicit: profile registration starts trust review, admin approval unlocks writes, and suspended issuers remain visible but blocked.
+- Keep the proof-to-employer handoff clean: proof pages carry hash and candidate context into an employer review checklist before escrow creation.
 - Keep the proof export route healthy: `/proof/<hash>/export`, including the recruiter-safe summary and unsigned standards-alignment preview.
-- Use `/pilot` as the visible capture path for issuer pilots and employer integration requests.
-- Turn candidate pages into honest talent passports, without pretending wallet-wide credential discovery exists before an indexer is built.
+- Use `/pilot` as the visible capture path for issuer pilots and employer integration requests, with guardrails that keep the first rollout to 5-10 testnet credentials.
+- Turn candidate pages into honest talent passports: linked proof pages can attach one known proof, but wallet-wide credential discovery still waits for an indexer.
 - Keep `/status` current for demo health, contract ID, proof links, and domain state.
 - Document a pilot workflow for one real issuer and a small batch of graduates.
 

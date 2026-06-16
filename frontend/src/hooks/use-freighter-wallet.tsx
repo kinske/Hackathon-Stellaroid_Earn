@@ -7,7 +7,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { connectFreighterWallet, readFreighterWallet } from "@/lib/freighter";
+import {
+  connectFreighterWallet,
+  disconnectFreighterWallet,
+  readFreighterWallet,
+} from "@/lib/freighter";
 import type { WalletSnapshot } from "@/lib/types";
 
 const initialWalletState: WalletSnapshot = {
@@ -86,6 +90,7 @@ function useFreighterWalletState(): FreighterWalletState {
   }
 
   function disconnectWallet() {
+    disconnectFreighterWallet();
     setWallet(initialWalletState);
   }
 

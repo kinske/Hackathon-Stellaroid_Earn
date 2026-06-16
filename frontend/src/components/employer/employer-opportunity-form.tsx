@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Button, Input, useToast } from "@/components/ui";
+import { useCallback, useEffect, useState } from "react";
+import { Button, CopyButton, Input, useToast } from "@/components/ui";
 import { Badge } from "@/components/ui/badge";
 import { useFreighterWallet } from "@/hooks/use-freighter-wallet";
 import { appConfig, hasRequiredConfig } from "@/lib/config";
@@ -15,11 +15,63 @@ import { humanizeError } from "@/lib/errors";
 import { isValidDecimalAmount, parseAmountToInt } from "@/lib/format";
 import { MAX_OPPORTUNITY_MILESTONES } from "@/lib/types";
 import { withTimeout } from "@/lib/with-timeout";
-import { ExternalLink } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  ExternalLink,
+  FileDown,
+  Search,
+  ShieldCheck,
+  UserCheck,
+  WalletCards,
+} from "lucide-react";
 
 interface EmployerOpportunityFormProps {
   initialHash?: string;
   initialCandidate?: string;
+}
+
+function isValidCertificateHash(value: string) {
+  return /^[0-9a-f]{64}$/i.test(value.trim());
+}
+
+function normalizeAddressForCompare(address: string) {
+  return address.trim().toUpperCase();
+}
+
+function ReviewItem({
+  complete,
+  label,
+  detail,
+}: {
+  complete: boolean;
+  label: string;
+  detail: string;
+}) {
+  return (
+    <li className="flex gap-3 rounded-lg border border-border bg-bg px-3 py-3">
+      <span
+        className={
+          complete
+            ? "mt-0.5 text-success"
+            : "mt-0.5 text-text-muted/70"
+        }
+        aria-hidden="true"
+      >
+        {complete ? (
+          <CheckCircle2 className="h-4 w-4" />
+        ) : (
+          <span className="block h-4 w-4 rounded-full border border-current" />
+        )}
+      </span>
+      <span className="min-w-0">
+        <span className="block text-sm font-semibold text-text">{label}</span>
+        <span className="mt-0.5 block text-xs leading-relaxed text-text-muted">
+          {detail}
+        </span>
+      </span>
+    </li>
+  );
 }
 
 export function EmployerOpportunityForm({
@@ -39,31 +91,86 @@ export function EmployerOpportunityForm({
   const [createdOppId, setCreatedOppId] = useState<string | null>(null);
   const [opportunityFunded, setOpportunityFunded] = useState(false);
   const [funding, setFunding] = useState(false);
+  const [autoLookupAttempted, setAutoLookupAttempted] = useState(false);
+  const [initialLookupError, setInitialLookupError] = useState<string | null>(
+    null,
+  );
 
   const walletConnected =
     wallet.status === "connected" && !!wallet.address && wallet.isExpectedNetwork;
 
-  async function handleLookup() {
-    if (!certHash.trim()) return;
-    setLookupBusy(true);
-    setCert(null);
-    try {
-      const record = await getCertificate(certHash.trim());
-      setCert(record);
-      if (!record) {
-        toast({
-          title: "Not found",
-          detail: "No certificate on-chain for that hash.",
-          tone: "warning",
-        });
+  const cleanHash = certHash.trim();
+  const candidateFromLink = initialCandidate.trim();
+  const validHashFormat = isValidCertificateHash(cleanHash);
+  const candidateMatchesProof =
+    !candidateFromLink ||
+    !cert ||
+    normalizeAddressForCompare(cert.owner) ===
+      normalizeAddressForCompare(candidateFromLink);
+  const configured = hasRequiredConfig();
+
+  const handleLookup = useCallback(
+    async (
+      targetHash = certHash.trim(),
+      options: { silent?: boolean } = {},
+    ) => {
+      const lookupHash = targetHash.trim();
+      if (!lookupHash || !isValidCertificateHash(lookupHash)) {
+        setInitialLookupError("Enter a 64-character certificate hash first.");
+        return;
       }
-    } catch (e) {
-      const h = humanizeError(e);
-      toast({ title: h.title, detail: h.detail, tone: "danger" });
-    } finally {
-      setLookupBusy(false);
+
+      setLookupBusy(true);
+      setCert(null);
+      setInitialLookupError(null);
+      setCreatedOppId(null);
+      setOpportunityFunded(false);
+      try {
+        const record = await getCertificate(lookupHash);
+        setCert(record);
+        if (record?.title) {
+          setTitle((current) =>
+            current.trim() ? current : `Paid trial: ${record.title}`,
+          );
+        }
+        if (!record) {
+          if (options.silent) {
+            setInitialLookupError("No certificate on-chain for that hash.");
+          } else {
+            toast({
+              title: "Not found",
+              detail: "No certificate on-chain for that hash.",
+              tone: "warning",
+            });
+          }
+        }
+      } catch (e) {
+        const h = humanizeError(e);
+        if (options.silent) {
+          setInitialLookupError(h.detail ?? h.title);
+        } else {
+          toast({ title: h.title, detail: h.detail, tone: "danger" });
+        }
+      } finally {
+        setLookupBusy(false);
+      }
+    },
+    [certHash, toast],
+  );
+
+  useEffect(() => {
+    const hashFromProof = initialHash.trim();
+    if (
+      autoLookupAttempted ||
+      !hashFromProof ||
+      !isValidCertificateHash(hashFromProof)
+    ) {
+      return;
     }
-  }
+
+    setAutoLookupAttempted(true);
+    void handleLookup(hashFromProof, { silent: true });
+  }, [autoLookupAttempted, handleLookup, initialHash]);
 
   async function handleCreate() {
     if (!wallet.address || !cert) return;
@@ -141,20 +248,180 @@ export function EmployerOpportunityForm({
     String(parsedMilestones) === milestones.trim() &&
     parsedMilestones >= 1 &&
     parsedMilestones <= MAX_OPPORTUNITY_MILESTONES;
-  const canCreate =
-    hasRequiredConfig() &&
+  const amountIsValid = isValidDecimalAmount(amount, appConfig.assetDecimals);
+  const canCreate = Boolean(
+    configured &&
     walletConnected &&
     cert &&
     cert.status === "verified" &&
+    candidateMatchesProof &&
     !submitting &&
-    isValidDecimalAmount(amount, appConfig.assetDecimals) &&
-    validMilestoneCount;
+    amountIsValid &&
+    validMilestoneCount,
+  );
+  const hashError =
+    cleanHash && !validHashFormat
+      ? "Use a 64-character hex certificate hash."
+      : undefined;
+  const amountError =
+    amount.trim() && !amountIsValid
+      ? `Enter a positive ${appConfig.assetCode} amount.`
+      : undefined;
+  const milestoneError =
+    milestones.trim() && !validMilestoneCount
+      ? `Use a whole number from 1 to ${MAX_OPPORTUNITY_MILESTONES}.`
+      : undefined;
+  const proofLink = validHashFormat ? `/proof/${cleanHash}` : null;
+  const proofPackLink = validHashFormat ? `/proof/${cleanHash}/export` : null;
+  const checklist = [
+    {
+      complete: Boolean(cert && cert.status === "verified"),
+      label: "Verified credential loaded",
+      detail: cert
+        ? cert.status === "verified"
+          ? "This credential is in the verified on-chain state."
+          : `Current status is ${cert.status}; funding stays locked until verification.`
+        : "Look up the proof hash before creating an opportunity.",
+    },
+    {
+      complete: Boolean(cert && candidateMatchesProof),
+      label: "Candidate wallet matches",
+      detail:
+        cert && candidateFromLink
+          ? candidateMatchesProof
+            ? "The proof-link candidate matches the credential owner."
+            : "The proof-link candidate does not match the credential owner."
+          : cert
+            ? "The credential owner will be used as the paid-trial candidate."
+            : "Candidate context appears after a credential lookup.",
+    },
+    {
+      complete: walletConnected,
+      label: "Employer wallet ready",
+      detail: walletConnected
+        ? "Freighter is connected to the expected Stellar network."
+        : "Connect Freighter on the expected network before signing.",
+    },
+    {
+      complete: amountIsValid && validMilestoneCount,
+      label: "Escrow terms ready",
+      detail:
+        amountIsValid && validMilestoneCount
+          ? "Amount and milestone count are valid for the contract."
+          : "Enter a positive amount and a supported milestone count.",
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-5">
+      {(initialHash || initialCandidate) && (
+        <section
+          className="rounded-2xl border border-primary/25 bg-primary/5 p-5"
+          aria-label="Proof handoff"
+        >
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-[760px]">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-primary" aria-hidden="true" />
+                <p className="text-xs uppercase tracking-[0.16em] text-primary">
+                  Proof handoff
+                </p>
+              </div>
+              <h2 className="mt-2 text-xl font-semibold text-text">
+                Review before funding
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-text-muted">
+                This console was opened from a proof page. Confirm the
+                credential status, candidate wallet, and escrow terms before
+                creating the paid trial.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {proofLink ? (
+                <Button
+                  variant="secondary"
+                  href={proofLink}
+                  icon={<ExternalLink className="h-4 w-4" />}
+                >
+                  Open proof
+                </Button>
+              ) : null}
+              {proofPackLink ? (
+                <Button
+                  variant="ghost"
+                  href={proofPackLink}
+                  icon={<FileDown className="h-4 w-4" />}
+                >
+                  Proof pack
+                </Button>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
+            <div className="rounded-xl border border-border bg-bg px-4 py-3">
+              <span className="text-xs uppercase tracking-[0.14em] text-text-muted">
+                Proof hash
+              </span>
+              <div className="mt-2 flex min-w-0 items-center gap-2">
+                <code className="min-w-0 flex-1 break-all text-xs text-text">
+                  {cleanHash || "No hash supplied"}
+                </code>
+                {cleanHash ? (
+                  <CopyButton
+                    value={cleanHash}
+                    ariaLabel="Copy certificate hash"
+                    className="min-h-11 min-w-11"
+                  />
+                ) : null}
+              </div>
+            </div>
+            <div className="rounded-xl border border-border bg-bg px-4 py-3">
+              <span className="text-xs uppercase tracking-[0.14em] text-text-muted">
+                Candidate wallet
+              </span>
+              <div className="mt-2 flex min-w-0 items-center gap-2">
+                <code className="min-w-0 flex-1 break-all text-xs text-text">
+                  {candidateFromLink || cert?.owner || "Loaded after lookup"}
+                </code>
+                {candidateFromLink || cert?.owner ? (
+                  <CopyButton
+                    value={candidateFromLink || cert?.owner || ""}
+                    ariaLabel="Copy candidate wallet"
+                    className="min-h-11 min-w-11"
+                  />
+                ) : null}
+              </div>
+            </div>
+          </div>
+
+          <ul className="mt-4 grid list-none gap-3 p-0 md:grid-cols-2">
+            {checklist.map((item) => (
+              <ReviewItem key={item.label} {...item} />
+            ))}
+          </ul>
+
+          {initialLookupError ? (
+            <div className="mt-4 flex gap-3 rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-text">
+              <AlertTriangle
+                className="mt-0.5 h-4 w-4 shrink-0 text-warning"
+                aria-hidden="true"
+              />
+              <p className="m-0 leading-relaxed">{initialLookupError}</p>
+            </div>
+          ) : null}
+        </section>
+      )}
+
       <section className="rounded-2xl border border-border bg-surface p-5 flex flex-col gap-4">
-        <h2 className="text-xl font-semibold text-text">Look up credential</h2>
-        <div className="flex gap-3 items-end">
+        <div>
+          <h2 className="text-xl font-semibold text-text">Look up credential</h2>
+          <p className="mt-1 text-sm text-text-muted">
+            Start with the proof hash. A verified credential unlocks the paid
+            trial form.
+          </p>
+        </div>
+        <div className="flex flex-col gap-3 md:flex-row md:items-end">
           <Input
             label="Certificate hash"
             value={certHash}
@@ -167,12 +434,14 @@ export function EmployerOpportunityForm({
             placeholder="64 hex characters"
             mono
             className="flex-1"
+            error={hashError}
           />
           <Button
             variant="secondary"
             onClick={() => void handleLookup()}
+            icon={<Search className="h-4 w-4" />}
             loading={lookupBusy}
-            disabled={!certHash.trim()}
+            disabled={!cleanHash || !validHashFormat}
           >
             Look up
           </Button>
@@ -194,6 +463,18 @@ export function EmployerOpportunityForm({
             <span className="text-xs text-text-muted font-mono">
               Owner: {cert.owner}
             </span>
+            <div className="flex flex-wrap gap-2 pt-2">
+              {proofLink ? (
+                <Button variant="ghost" size="sm" href={proofLink}>
+                  Open proof page
+                </Button>
+              ) : null}
+              {proofPackLink ? (
+                <Button variant="ghost" size="sm" href={proofPackLink}>
+                  Download proof pack
+                </Button>
+              ) : null}
+            </div>
           </div>
         ) : initialCandidate ? (
           <div className="rounded-xl border border-border bg-bg px-4 py-3 flex flex-col gap-1">
@@ -205,9 +486,42 @@ export function EmployerOpportunityForm({
         ) : null}
       </section>
 
+      {cert && !candidateMatchesProof ? (
+        <div
+          className="flex gap-3 rounded-2xl border border-danger/30 bg-danger/10 px-5 py-4"
+          role="alert"
+        >
+          <AlertTriangle
+            className="mt-0.5 h-5 w-5 shrink-0 text-danger"
+            aria-hidden="true"
+          />
+          <div>
+            <p className="text-sm font-semibold text-text">
+              Candidate wallet mismatch
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-text-muted">
+              The proof link supplied {candidateFromLink}, but the credential
+              owner is {cert.owner}. Funding is disabled until the proof link
+              and credential owner agree.
+            </p>
+          </div>
+        </div>
+      ) : null}
+
       {cert && cert.status === "verified" ? (
         <section className="rounded-2xl border border-border bg-surface p-5 flex flex-col gap-4">
-          <h2 className="text-xl font-semibold text-text">Create paid trial</h2>
+          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-text">Create paid trial</h2>
+              <p className="mt-1 text-sm text-text-muted">
+                The contract creates the opportunity first, then funds escrow
+                as a separate signed step.
+              </p>
+            </div>
+            <Badge tone={candidateMatchesProof ? "success" : "danger"} dot>
+              {candidateMatchesProof ? "ready for escrow" : "blocked"}
+            </Badge>
+          </div>
           <Input
             label="Opportunity title"
             value={title}
@@ -220,6 +534,7 @@ export function EmployerOpportunityForm({
             onChange={(e) => setAmount(e.target.value)}
             placeholder="e.g., 100"
             helper="Funds will be held in escrow until you release them."
+            error={amountError}
           />
           <Input
             label="Number of milestones"
@@ -227,11 +542,40 @@ export function EmployerOpportunityForm({
             onChange={(e) => setMilestones(e.target.value)}
             placeholder="1"
             helper={`Use 1-${MAX_OPPORTUNITY_MILESTONES} milestones. Candidate submits each milestone for your approval before release.`}
+            error={milestoneError}
           />
+          {!canCreate ? (
+            <div className="rounded-xl border border-border bg-bg px-4 py-3">
+              <p className="text-sm font-semibold text-text">
+                Before creating this opportunity
+              </p>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-text-muted">
+                {!configured ? <li>Set the contract configuration.</li> : null}
+                {!walletConnected ? (
+                  <li>Connect Freighter on the expected Stellar network.</li>
+                ) : null}
+                {!candidateMatchesProof ? (
+                  <li>
+                    Use a proof link whose candidate matches the credential owner.
+                  </li>
+                ) : null}
+                {!amountIsValid ? (
+                  <li>Enter a positive {appConfig.assetCode} amount.</li>
+                ) : null}
+                {!validMilestoneCount ? (
+                  <li>
+                    Use a whole milestone count from 1 to{" "}
+                    {MAX_OPPORTUNITY_MILESTONES}.
+                  </li>
+                ) : null}
+              </ul>
+            </div>
+          ) : null}
           <div className="flex gap-3 flex-wrap">
             <Button
               variant="primary"
               onClick={() => void handleCreate()}
+              icon={<UserCheck className="h-4 w-4" />}
               loading={submitting}
               disabled={!canCreate}
             >
@@ -241,6 +585,7 @@ export function EmployerOpportunityForm({
               <Button
                 variant="primary"
                 onClick={() => void handleFund()}
+                icon={<WalletCards className="h-4 w-4" />}
                 loading={funding}
                 disabled={opportunityFunded}
               >

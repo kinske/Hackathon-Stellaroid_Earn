@@ -17,6 +17,13 @@ test("pilot intake page exposes issuer and employer paths", async ({ page }) => 
     "href",
     "/proof",
   );
+  await expect(page.getByRole("heading", { name: "Pilot scope guardrails" })).toBeVisible();
+  await expect(page.getByText("5 to 10 credentials")).toBeVisible();
+  await expect(page.getByText("No mainnet or production payroll")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Open issuer console" })).toHaveAttribute(
+    "href",
+    "/issuer",
+  );
 });
 
 test("verified proof exposes an employer summary export", async ({ page, request }) => {

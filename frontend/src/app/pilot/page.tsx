@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+import { CheckCircle2, ExternalLink, ShieldCheck } from "lucide-react";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteNav } from "@/components/layout/site-nav";
 import { JsonLd } from "@/components/ui/json-ld";
@@ -42,6 +42,15 @@ const intakeItems = [
   "Graduate wallet readiness and support needs",
   "Employer verification or paid-trial workflow",
   "Pilot success metric and rollback plan",
+];
+
+const guardrails = [
+  "5 to 10 credentials",
+  "One issuer and one approval contact",
+  "Testnet public proof pages only",
+  "No mainnet or production payroll",
+  "Manual rollback and revocation plan",
+  "Feedback from one recruiter or employer",
 ];
 
 export default function PilotPage() {
@@ -137,6 +146,52 @@ export default function PilotPage() {
             </a>
             .
           </p>
+        </section>
+
+        <section className="rounded-lg border border-primary/25 bg-primary/5 p-6">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div>
+              <div className="flex items-center gap-2 text-primary">
+                <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+                <p className="m-0 text-xs font-semibold uppercase tracking-[0.16em]">
+                  Narrow testnet rollout
+                </p>
+              </div>
+              <h2 className="mt-2 text-xl font-semibold text-text">
+                  Pilot scope guardrails
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-muted">
+                Keep the first pilot small enough to finish. The next credible milestone is not a
+                marketplace. It is one issuer proving that graduates and employers understand the
+                proof, trust, and paid-trial loop.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href="/issuer"
+                className="inline-flex min-h-11 items-center justify-center rounded-md border border-primary bg-primary px-4 text-sm font-semibold text-on-primary no-underline transition-colors hover:bg-primary-hover"
+              >
+                Open issuer console
+              </Link>
+              <Link
+                href="/status"
+                className="inline-flex min-h-11 items-center justify-center rounded-md border border-border bg-surface-2 px-4 text-sm font-semibold text-text no-underline transition-colors hover:border-primary"
+              >
+                Check demo status
+              </Link>
+            </div>
+          </div>
+          <ul className="mt-5 grid gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3" role="list">
+            {guardrails.map((item) => (
+              <li
+                key={item}
+                className="flex list-none gap-2 rounded-md border border-border bg-bg px-4 py-3 text-sm text-text-muted"
+              >
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </section>
       </main>
       <SiteFooter />

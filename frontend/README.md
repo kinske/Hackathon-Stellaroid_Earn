@@ -36,13 +36,14 @@ Open http://localhost:3000. Install [Freighter](https://www.freighter.app/) and 
 | `/` | Persona-first landing page with Issue, Verify, and Hire entry paths |
 | `/about` | About page |
 | `/proof` | Proof lookup form — enter any cert hash to check status |
-| `/proof/[hash]` | Public proof page — shareable, no wallet required. Cached 60 s at CDN; invalid hashes return instant 404. Verified proof pages expose an employer proof pack with recruiter summary and unsigned W3C VC 2.0 / Open Badges 3.0 alignment preview. |
+| `/proof/[hash]` | Public proof page — shareable, no wallet required. Cached 60 s at CDN; invalid hashes return instant 404. Verified proof pages expose an employer proof pack, a paid-trial handoff into `/employer`, and a candidate-passport handoff into `/talent/[address]?proof=[hash]`. |
 | `/proof/[hash]/export` | JSON employer proof pack. It is useful for recruiters and ATS notes, but the standards preview is unsigned and not a conformant VC/Open Badges credential. |
 | `/proof/[hash]/embed` | Compact iframe embed — for portfolios, Notion, blogs. `frame-ancestors *` CSP allows all hosts. |
-| `/issuer` | Issuer dashboard — wallet-aware issuer status plus admin-only issuer approval/suspension controls |
-| `/issuer/register` | Register the connected wallet as a pending issuer |
-| `/employer` | Employer console for verified-credential paid-trial escrow |
-| `/pilot` | Issuer pilot and employer integration intake |
+| `/issuer` | Issuer dashboard — wallet-aware trust-state ladder plus admin-only issuer approval/suspension controls |
+| `/issuer/register` | Register the connected wallet as a pending issuer, with approval-readiness guidance before signing |
+| `/employer` | Employer console for verified-credential paid-trial escrow. When opened from a proof page, it auto-loads the proof hash, shows a candidate/trust checklist, and blocks mismatched candidate links. |
+| `/talent/[address]` | Candidate passport for one Stellar wallet. With `?proof=<hash>`, it shows that specific verified proof if the proof owner matches the wallet; it does not claim automatic wallet-wide discovery. |
+| `/pilot` | Issuer pilot and employer integration intake, including testnet scope guardrails for the first 5-10 credential rollout |
 | `/status` | Operational status surface for demo health and config checks |
 
 ## Design system
