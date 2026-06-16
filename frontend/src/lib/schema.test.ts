@@ -104,6 +104,8 @@ test("proof article schema uses absolute canonical URLs and certificate dates", 
   assert.equal(schema.image, `https://stellaroid.tech/proof/${SAMPLE_HASH}/opengraph-image`);
   assert.equal(schema.author.name, "Mark Siazon");
   assert.equal(schema.about.identifier, SAMPLE_HASH);
+  assert.ok(schema.datePublished);
+  assert.ok(schema.dateModified);
   assert.match(schema.datePublished, /^2025-12-06T/);
   assert.match(schema.dateModified, /^2025-12-06T/);
 });
