@@ -3,12 +3,19 @@ import { expect, test } from "@playwright/test";
 test("register, verify, pay, and open the proof page", async ({ page }) => {
   await page.goto("/app");
 
-  await page.getByRole("button", { name: "Let’s go" }).click();
+  const walletIntro = page.getByRole("dialog", {
+    name: /wallet to sign/i,
+  });
+  await walletIntro
+    .getByRole("button", { name: "Let’s go" })
+    .click({ timeout: 5_000 })
+    .catch(() => undefined);
 
+  const connectButton = page.getByRole("button", { name: "Connect Freighter", exact: true }).first();
   await expect(
-    page.getByRole("button", { name: "Connect Freighter", exact: true }),
+    connectButton,
   ).toBeVisible();
-  await page.getByRole("button", { name: "Connect Freighter", exact: true }).click();
+  await connectButton.click();
 
   await expect(page.getByRole("button", { name: "Copy wallet address" })).toBeVisible();
   await expect(page.getByText("GAWI •••• •••• R34D")).toBeVisible();
@@ -93,4 +100,9 @@ test("register, verify, pay, and open the proof page", async ({ page }) => {
 
   await page.getByLabel("Amount (XLM)").fill("25");
   await expect(page.getByRole("button", { name: "Create opportunity" })).toBeEnabled();
+  await page.getByRole("button", { name: "Create opportunity" }).click();
+  await expect(page.getByText("Opportunity #1 is ready to track")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Fund escrow" })).toBeEnabled();
+  await page.getByRole("button", { name: "Fund escrow" }).click();
+  await expect(page.getByRole("button", { name: "Escrow funded" })).toBeVisible();
 });

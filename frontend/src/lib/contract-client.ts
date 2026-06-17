@@ -39,6 +39,7 @@ const E2E_WALLET_ADDRESS =
 const E2E_CERTIFICATE_STORAGE_KEY = "stellaroid:e2e:certificates";
 const e2eCertificates = new Map<string, Record<string, unknown>>();
 let e2eStorageHydrated = false;
+let nextE2EOpportunityId = 1;
 
 function normalizeHashKey(certHashHex: string) {
   return certHashHex.trim().replace(/^0x/i, "").toLowerCase();
@@ -978,6 +979,15 @@ export async function createOpportunity(
   amount: bigint,
   milestoneCount: number,
 ) {
+  if (appConfig.e2eMode) {
+    const id = String(nextE2EOpportunityId);
+    nextE2EOpportunityId += 1;
+    return {
+      hash: `e2e-create_opportunity-${employer.slice(0, 6)}`,
+      result: id,
+    };
+  }
+
   return signAndSubmit(
     employer,
     "create_opportunity",
