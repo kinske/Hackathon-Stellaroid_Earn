@@ -1,12 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
-import { Orbitron, Exo_2, JetBrains_Mono, Share_Tech_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { DeferredToastProvider } from "@/components/layout/deferred-toast-provider";
 import { JsonLd } from "@/components/ui/json-ld";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import "../styles/globals.css";
-import { cn } from "@/lib/utils";
 import {
   SITE_AUTHOR_LINKEDIN,
   SITE_AUTHOR_NAME,
@@ -16,34 +14,6 @@ import {
   SITE_KEYWORDS,
   SITE_NAME,
 } from "@/lib/seo";
-
-const orbitron = Orbitron({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-heading",
-  display: "swap",
-});
-
-const exo2 = Exo_2({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-mono",
-  display: "swap",
-});
-
-const shareTechMono = Share_Tech_Mono({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-pixel",
-  display: "swap",
-});
 
 const BASE_URL = SITE_CANONICAL_URL;
 
@@ -145,10 +115,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const lang = cookieStore.get("stellaroid:locale")?.value === "tl" ? "tl" : "en";
 
   return (
-    <html
-      lang={lang}
-      className={cn(orbitron.variable, exo2.variable, jetbrainsMono.variable, shareTechMono.variable, "font-sans")}
-    >
+    <html lang={lang} className="font-sans">
       <body suppressHydrationWarning>
         {webAppJsonLd.map((schema, i) => (
           <JsonLd key={i} data={schema} />

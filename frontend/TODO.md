@@ -42,6 +42,12 @@ Open http://localhost:3000 with [Freighter](https://www.freighter.app/) installe
 - [x] Pro-research intake archived under `../docs/spec/stellaroid`
 - [x] `/proof/[hash]/export` employer verification summary route
 - [x] `/pilot` issuer/employer pilot capture route
+- [x] Persona-first public entry: primary nav and landing cards now route visitors to Issue, Verify, Hire, Pilot, and Status
+- [x] Employer proof pack now includes an unsigned W3C VC 2.0 / Open Badges 3.0 alignment preview with explicit non-conformance warning
+- [x] Proof-to-employer handoff: `/employer?hash=...&candidate=...` auto-loads verified proofs, shows a review checklist, and blocks candidate wallet mismatches before escrow creation
+- [x] Proof-to-passport handoff: `/talent/[address]?proof=...` shows a known proof only when the proof owner matches the wallet, while keeping wallet-wide discovery marked as indexer-dependent
+- [x] Issuer onboarding clarity: registration shows approval readiness, and `/issuer` explains the profile -> approval -> issue credentials trust-state ladder
+- [x] Pilot scope guardrails: `/pilot` keeps the first rollout bounded to 5-10 testnet credentials with no mainnet or production payroll claims
 
 ## Pro-Research Backlog (2026-06-11)
 
@@ -50,7 +56,7 @@ Open http://localhost:3000 with [Freighter](https://www.freighter.app/) installe
 - [ ] Admin trust model: org admin, reviewer, viewer, support roles, and audit logs
 - [ ] Branded proof pages: issuer logo, policy links, custom OG variants, optional issuer domain mapping
 - [ ] Verification analytics: proof views, shares, verification requests, employer actions, and issuer conversion
-- [ ] Standards export: VC 2.0 / Open Badges 3.0 compatible JSON after pilot demand is proven
+- [ ] Standards export: signed VC 2.0 / Open Badges 3.0 compatible JSON after pilot demand is proven
 
 ## Nice-to-haves (out of scope for bootcamp submission)
 

@@ -15,6 +15,7 @@ const FREIGHTER_TIMEOUT_MS = 5_000;
 
 const E2E_WALLET_ADDRESS =
   "GAWIOVGFSPJDEIJJZUSVRFPVP3D5VNO2LGCU47KEHJD6MV277QKNR34D";
+const E2E_WALLET_STORAGE_KEY = "stellaroid:e2e:wallet-connected";
 
 function buildUnsupportedWallet(error?: string): WalletSnapshot {
   return {
@@ -37,8 +38,36 @@ function buildE2EWallet(): WalletSnapshot {
   };
 }
 
+function getE2EStorage() {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.sessionStorage;
+  } catch {
+    return null;
+  }
+}
+
+function isE2EWalletConnected() {
+  return getE2EStorage()?.getItem(E2E_WALLET_STORAGE_KEY) === "1";
+}
+
+function setE2EWalletConnected(connected: boolean) {
+  const storage = getE2EStorage();
+  if (!storage) return;
+
+  if (connected) {
+    storage.setItem(E2E_WALLET_STORAGE_KEY, "1");
+  } else {
+    storage.removeItem(E2E_WALLET_STORAGE_KEY);
+  }
+}
+
 export async function readFreighterWallet(): Promise<WalletSnapshot> {
   if (appConfig.e2eMode) {
+    if (isE2EWalletConnected()) {
+      return buildE2EWallet();
+    }
+
     return {
       status: "disconnected",
       address: null,
@@ -114,6 +143,7 @@ export async function readFreighterWallet(): Promise<WalletSnapshot> {
 
 export async function connectFreighterWallet() {
   if (appConfig.e2eMode) {
+    setE2EWalletConnected(true);
     return buildE2EWallet();
   }
 
@@ -129,6 +159,12 @@ export async function connectFreighterWallet() {
   }
 
   return readFreighterWallet();
+}
+
+export function disconnectFreighterWallet() {
+  if (appConfig.e2eMode) {
+    setE2EWalletConnected(false);
+  }
 }
 
 export async function signWithFreighter(transactionXdr: string, address: string) {

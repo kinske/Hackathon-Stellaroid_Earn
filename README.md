@@ -40,6 +40,8 @@ The bootcamp/event submission is complete. Stellaroid Earn is now maintained as 
 
 `www.stellaroid.tech` and `earn.stellaroid.tech` redirect to the canonical apex URL.
 
+The public entry flow is organized around three personas: **Issue**, **Verify**, and **Hire**. Verified proof pages now hand employers into `/employer` with the proof hash and candidate wallet preloaded, then require a review checklist before escrow creation. They also hand recruiters into `/talent/<address>?proof=<hash>` so the candidate passport can show a known proof without pretending wallet-wide credential discovery exists yet. Issuer registration now explains approval readiness before signing, and `/pilot` keeps the first rollout bounded to a small testnet issuer pilot. Employer proof packs include a recruiter-safe summary plus an unsigned standards-alignment preview for W3C VC 2.0 and Open Badges 3.0 mapping. That preview is not a signed standards credential yet.
+
 ---
 
 ## 30-Second Pitch

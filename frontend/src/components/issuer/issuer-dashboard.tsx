@@ -352,14 +352,15 @@ export function IssuerDashboard() {
             </div>
             <div className="mt-5 rounded-xl border border-border bg-bg/60 p-4">
               <p className="text-xs uppercase tracking-[0.14em] text-text-muted/70">
-                Demo handoff
+                Trust-state ladder
               </p>
               <p className="mt-2 text-sm font-semibold text-text">
-                Pending -&gt; Approved -&gt; Can issue
+                Profile -&gt; Approval -&gt; Issue credentials
               </p>
               <p className="mt-1 text-sm text-text-muted">
-                This is the judge-facing path: a profile can exist without permission, but only an
-                approved issuer can publish trusted credentials.
+                Approved issuers can register, verify, suspend, and revoke credentials. Pending
+                and suspended issuers stay visible for auditability, but contract writes remain
+                locked.
               </p>
             </div>
             <div className="mt-4 flex flex-col gap-3">

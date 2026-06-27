@@ -15,15 +15,19 @@ export const metadata: Metadata = buildPageMetadata({
 
 interface EmployerPageProps {
   searchParams?: Promise<{
-    hash?: string;
-    candidate?: string;
+    hash?: string | string[];
+    candidate?: string | string[];
   }>;
+}
+
+function firstSearchParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
 }
 
 export default async function EmployerPage({ searchParams }: EmployerPageProps) {
   const params = await searchParams;
-  const initialHash = params?.hash ?? "";
-  const initialCandidate = params?.candidate ?? "";
+  const initialHash = firstSearchParam(params?.hash) ?? "";
+  const initialCandidate = firstSearchParam(params?.candidate) ?? "";
 
   return (
     <FreighterWalletProvider>

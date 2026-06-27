@@ -33,7 +33,7 @@ Do not expand into marketplace, NFT, broad AI, or mainnet payment scope before i
 | Batch credential issuance | Accepted backlog | Track as issuer pilot requirement: CSV preview, validation, and signing queue after one issuer pilot. |
 | Revocation and suspension UX | Implemented, needs richer reason taxonomy later | Contract supports revoke/suspend, dashboard action buttons exist, and proof pages render revoked/suspended status banners. Reason taxonomy remains backlog. |
 | Expiration and renewal flow | Accepted backlog | Contract has `expires_at` and UI status handling. Actual issuer renewal workflow remains future work because current issuance sets `expires_at = 0`. |
-| Employer export pack | Implemented | `/proof/[hash]/export` returns a recruiter-safe JSON summary with status, issuer, timestamps, metadata, proof URL, and explorer links. |
+| Employer export pack | Implemented | `/proof/[hash]/export` returns a recruiter-safe JSON proof pack with status, issuer, timestamps, metadata, proof URL, explorer links, and an unsigned standards-alignment preview. |
 | Issuer pilot and employer integration request flows | Implemented | `/pilot` provides issuer pilot and employer integration paths with explicit testnet boundary. |
 | Role-based admin model | Accepted backlog | Future org admin, reviewer, viewer, and support roles are documented here and in roadmap; not implemented in testnet MVP. |
 | Audit-log requirements | Accepted backlog | Future read-model/audit trail requirement; current on-chain events and `/metrics` provide only public chain activity. |
@@ -57,7 +57,7 @@ These are accepted product backlog items, not open pro-research intake tasks:
 - Admin and trust: org admin, reviewer, viewer, support roles, reviewer evidence, issuer domain verification, and audit-log surfaces.
 - Analytics: proof views, share actions, verification requests, employer actions, and issuer conversion to pilot.
 - Branded proof pages: issuer logos, policy links, custom OG variants, optional issuer domain mapping.
-- Standards export: VC 2.0 / Open Badges 3.0 compatible JSON and issuer-signed envelopes after pilot demand is proven.
+- Standards export: signed VC 2.0 / Open Badges 3.0 compatible JSON and issuer-signed envelopes after pilot demand is proven. Current proof packs include only an unsigned alignment preview and must not be treated as standards-conformant credentials.
 
 ## External Gates
 
@@ -72,5 +72,7 @@ These are accepted product backlog items, not open pro-research intake tasks:
 - `npm run build` passed on 2026-06-11; `/proof/[hash]` first-load JS is 127 kB, `/proof` is 125 kB, and `/pilot` is 124 kB.
 - `npm run test:unit` passed 25/25 on 2026-06-11.
 - `npm run test:e2e` passed 9/9 on Chromium on 2026-06-11.
-- Live canonical checks before local deploy showed `https://stellaroid.tech/` returning `200 OK`, with `www` and `earn` redirecting permanently to the apex.
-- Live `/pilot` is not expected to exist until these local changes are committed, pushed, and deployed.
+- Live canonical checks showed `https://stellaroid.tech/` returning `200 OK`, with `www` and `earn` redirecting permanently to the apex.
+- Live route checks on 2026-06-11 showed `/pilot`, `/proof/[hash]`, `/proof/[hash]/export`, and `/proof/[hash]/qr` returning `200 OK`.
+- Live mobile Lighthouse proof refreshed on 2026-06-11 at 18:37 +08 after using Playwright Chromium with an isolated Chrome profile. `/pilot` scored Performance `99`, Accessibility `96`, Best Practices `100`, SEO `92`, CLS `0`; `/proof/[hash]` scored Performance `98`, Accessibility `96`, Best Practices `100`, SEO `92`, CLS `0`. Evidence JSON: `%TEMP%\stellaroid-live-mobile-lh-pilot-20260611-183728.json` and `%TEMP%\stellaroid-live-mobile-lh-proof-20260611-183728.json`.
+- Live route proof was refreshed again on 2026-06-11 at 20:08 +08: apex returned `200 OK`; `www` and `earn` redirected permanently to `https://stellaroid.tech/`; `/pilot`, `/proof/[hash]`, `/proof/[hash]/export`, and `/proof/[hash]/qr` returned `200 OK` with expected HTML, JSON attachment, and SVG content types. Playwright Pixel 5 navigation loaded `/pilot` and `/proof/[hash]` with no failed requests and no horizontal overflow. A fresh Lighthouse retry at 20:07 +08 produced unusable `about:blank` reports with `net::ERR_ABORTED`, so the 18:37 Lighthouse JSON remains the latest valid mobile Lighthouse evidence.

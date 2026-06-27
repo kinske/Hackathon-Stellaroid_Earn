@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { appConfig } from "@/lib/config";
 import { seoCanonicalUrl } from "@/lib/seo";
 import { CopyButton } from "@/components/ui/copy-button";
@@ -13,6 +12,9 @@ export function RecruiterCtaPanel({ hash, candidateAddress }: RecruiterCtaPanelP
   const employerHref = candidateAddress
     ? `/employer?hash=${encodeURIComponent(hash)}&candidate=${encodeURIComponent(candidateAddress)}`
     : `/employer?hash=${encodeURIComponent(hash)}`;
+  const candidatePassportHref = candidateAddress
+    ? `/talent/${candidateAddress}?proof=${encodeURIComponent(hash)}`
+    : null;
   const contractEventsHref = appConfig.contractId
     ? `${appConfig.explorerUrl}/contract/${appConfig.contractId}#events`
     : null;
@@ -30,30 +32,28 @@ export function RecruiterCtaPanel({ hash, candidateAddress }: RecruiterCtaPanelP
         carry over the certificate hash and candidate wallet.
       </p>
       <div className="flex gap-3 flex-wrap">
-        <Link
+        <a
           href={employerHref}
-          prefetch={false}
-          className="inline-flex items-center px-4 py-2 rounded-md bg-primary text-on-primary font-semibold text-sm no-underline hover:bg-primary-hover transition-colors"
+          className="inline-flex min-h-11 items-center px-4 py-2 rounded-md bg-primary text-on-primary font-semibold text-sm no-underline hover:bg-primary-hover transition-colors"
         >
           Fund paid trial
-        </Link>
+        </a>
         <a
           href={`/proof/${hash}/export`}
           download
-          className="inline-flex items-center px-4 py-2 rounded-md border border-border bg-surface-2 text-text font-semibold text-sm no-underline hover:border-primary transition-colors"
+          className="inline-flex min-h-11 items-center px-4 py-2 rounded-md border border-border bg-surface-2 text-text font-semibold text-sm no-underline hover:border-primary transition-colors"
         >
-          Download summary
+          Download proof pack
         </a>
         <CopyButton value={proofUrl} label="Copy proof link" ariaLabel="Copy proof link" />
       </div>
-      {candidateAddress ? (
-        <Link
-          href={`/talent/${candidateAddress}`}
-          prefetch={false}
+      {candidatePassportHref ? (
+        <a
+          href={candidatePassportHref}
           className="text-[0.8125rem] text-accent no-underline hover:underline"
         >
           View candidate passport →
-        </Link>
+        </a>
       ) : null}
       {contractEventsHref ? (
         <a
