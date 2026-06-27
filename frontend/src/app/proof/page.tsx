@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { SiteNav } from "@/components/layout/site-nav";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { JsonLd } from "@/components/ui/json-ld";
@@ -67,50 +68,22 @@ export default async function ProofIndex() {
         }}
       />
       <SiteNav />
-      <main
-        id="main"
-        style={{
-          maxWidth: 640,
-          margin: "0 auto",
-          padding: "72px 24px",
-          color: "var(--color-text)",
-          textAlign: "center",
-        }}
-      >
-        <img
+      <main id="main" className="mx-auto max-w-2xl px-6 py-18 text-center text-text">
+        <Image
           src="/illust/illust-lookup.svg"
           alt=""
           width={192}
           height={128}
-          style={{ display: "block", margin: "0 auto 20px", imageRendering: "pixelated" }}
+          className="mx-auto mb-5 block h-auto [image-rendering:pixelated]"
+          aria-hidden="true"
         />
-        <span
-          style={{
-            display: "inline-block",
-            fontSize: 12,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            color: "var(--color-primary)",
-            border: "1px solid rgba(245, 158, 11, 0.3)",
-            background: "rgba(245, 158, 11, 0.08)",
-            padding: "4px 12px",
-            borderRadius: 999,
-            marginBottom: 16,
-          }}
-        >
+        <span className="mb-4 inline-block rounded-full border border-primary/30 bg-primary/8 px-3 py-1 font-pixel text-xs font-semibold uppercase tracking-[0.12em] text-primary">
           Public proof
         </span>
-        <h1 style={{ fontSize: 40, margin: "0 0 12px", letterSpacing: "-0.02em" }}>
+        <h1 className="mb-3 text-4xl font-bold tracking-tight text-text">
           Look up any certificate
         </h1>
-        <p
-          style={{
-            color: "var(--color-text-muted)",
-            fontSize: 16,
-            lineHeight: 1.6,
-            marginBottom: 32,
-          }}
-        >
+        <p className="mx-auto mb-8 max-w-xl text-base leading-relaxed text-text-muted">
           Paste a 64-character SHA-256 hash to view its on-chain record, issuer
           trust status, and any attached credential evidence. No wallet
           required.

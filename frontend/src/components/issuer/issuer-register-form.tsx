@@ -9,7 +9,7 @@ import { appConfig, hasRequiredConfig } from "@/lib/config";
 import { registerIssuer } from "@/lib/contract-client";
 import { humanizeError } from "@/lib/errors";
 import { withTimeout } from "@/lib/with-timeout";
-import { ExternalLink } from "lucide-react";
+import { ClipboardCheck, ExternalLink, ShieldCheck, UserCheck } from "lucide-react";
 
 const CATEGORIES = [
   { value: "bootcamp", label: "Bootcamp" },
@@ -17,6 +17,24 @@ const CATEGORIES = [
   { value: "employer", label: "Employer" },
   { value: "dao", label: "DAO" },
   { value: "platform", label: "Platform" },
+];
+
+const readinessItems = [
+  {
+    icon: <UserCheck className="h-4 w-4" aria-hidden="true" />,
+    title: "Public issuer profile",
+    detail: "Use the organization name recruiters and graduates should see on proof pages.",
+  },
+  {
+    icon: <ShieldCheck className="h-4 w-4" aria-hidden="true" />,
+    title: "Admin approval required",
+    detail: "Registration creates a pending profile. The admin wallet must approve it before writes unlock.",
+  },
+  {
+    icon: <ClipboardCheck className="h-4 w-4" aria-hidden="true" />,
+    title: "Pilot scope first",
+    detail: "Start with a small issuer pilot before adding batch issuance, mainnet, or production payroll.",
+  },
 ];
 
 function isValidWebsite(value: string): boolean {
@@ -153,9 +171,42 @@ export function IssuerRegisterForm() {
         </span>
       </div>
 
+      <section className="rounded-xl border border-border bg-bg px-4 py-4">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h3 className="text-base font-semibold text-text">Approval readiness</h3>
+            <p className="mt-1 text-sm leading-relaxed text-text-muted">
+              Treat registration as the start of trust review, not the end of onboarding.
+            </p>
+          </div>
+          <Badge tone="warning" dot>
+            Admin approval required
+          </Badge>
+        </div>
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          {readinessItems.map((item) => (
+            <div
+              key={item.title}
+              className="rounded-lg border border-border bg-surface px-3 py-3"
+            >
+              <div className="flex items-center gap-2 text-primary">
+                {item.icon}
+                <p className="text-sm font-semibold text-text">{item.title}</p>
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-text-muted">
+                {item.detail}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <div className="flex gap-3 flex-wrap">
         <Button type="submit" variant="primary" loading={submitting} disabled={!canSubmit}>
           Register issuer on-chain
+        </Button>
+        <Button type="button" variant="secondary" href="/pilot">
+          Plan a pilot first
         </Button>
         <Button type="button" variant="ghost" onClick={() => router.push("/issuer")}>
           Back to issuer status

@@ -36,10 +36,72 @@ const FALLBACK_SIMULATION_SOURCE =
   "GBAKLRUJEOZGWKSHJFFWJ4DINXQZEJBT7JQTR5T4GATQU2SNO4ZFHZQ4";
 const E2E_WALLET_ADDRESS =
   "GAWIOVGFSPJDEIJJZUSVRFPVP3D5VNO2LGCU47KEHJD6MV277QKNR34D";
+const E2E_CERTIFICATE_STORAGE_KEY = "stellaroid:e2e:certificates";
 const e2eCertificates = new Map<string, Record<string, unknown>>();
+let e2eStorageHydrated = false;
+let nextE2EOpportunityId = 1;
 
 function normalizeHashKey(certHashHex: string) {
   return certHashHex.trim().replace(/^0x/i, "").toLowerCase();
+}
+
+function getE2EStorage() {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.sessionStorage;
+  } catch {
+    return null;
+  }
+}
+
+function hydrateE2ECertificates() {
+  if (e2eStorageHydrated) return;
+  e2eStorageHydrated = true;
+
+  const storage = getE2EStorage();
+  const raw = storage?.getItem(E2E_CERTIFICATE_STORAGE_KEY);
+  if (!raw) return;
+
+  try {
+    const entries = JSON.parse(raw) as Array<[string, Record<string, unknown>]>;
+    if (!Array.isArray(entries)) return;
+
+    for (const [key, value] of entries) {
+      if (typeof key === "string" && value && typeof value === "object") {
+        e2eCertificates.set(normalizeHashKey(key), value);
+      }
+    }
+  } catch {
+    storage?.removeItem(E2E_CERTIFICATE_STORAGE_KEY);
+  }
+}
+
+function persistE2ECertificates() {
+  const storage = getE2EStorage();
+  if (!storage) return;
+
+  try {
+    storage.setItem(
+      E2E_CERTIFICATE_STORAGE_KEY,
+      JSON.stringify([...e2eCertificates.entries()]),
+    );
+  } catch {
+    // E2E mode can still fall back to the in-memory map if storage is denied.
+  }
+}
+
+function getE2ECertificate(certHashHex: string) {
+  hydrateE2ECertificates();
+  return e2eCertificates.get(normalizeHashKey(certHashHex));
+}
+
+function setE2ECertificate(
+  certHashHex: string,
+  record: Record<string, unknown>,
+) {
+  hydrateE2ECertificates();
+  e2eCertificates.set(normalizeHashKey(certHashHex), record);
+  persistE2ECertificates();
 }
 
 function buildE2ECertificate(
@@ -53,7 +115,7 @@ function buildE2ECertificate(
     metadataUri?: string;
   },
 ) {
-  const current = e2eCertificates.get(normalizeHashKey(certHashHex));
+  const current = getE2ECertificate(certHashHex);
   return {
     owner,
     issuer,
@@ -781,8 +843,8 @@ export async function registerCertificate(
   },
 ) {
   if (appConfig.e2eMode) {
-    e2eCertificates.set(
-      normalizeHashKey(certHashHex),
+    setE2ECertificate(
+      certHashHex,
       buildE2ECertificate(student, issuer, certHashHex, "Issued", metadata),
     );
     return {
@@ -808,8 +870,8 @@ export async function registerCertificate(
 export async function verifyCertificate(caller: string, certHashHex: string) {
   if (appConfig.e2eMode) {
     const key = normalizeHashKey(certHashHex);
-    const current = e2eCertificates.get(key);
-    e2eCertificates.set(
+    const current = getE2ECertificate(key);
+    setE2ECertificate(
       key,
       buildE2ECertificate(
         normalizeString(current?.owner) || E2E_WALLET_ADDRESS,
@@ -841,7 +903,7 @@ export async function verifyCertificate(caller: string, certHashHex: string) {
 
 export async function getCertificate(certHashHex: string) {
   if (appConfig.e2eMode) {
-    return normalizeCertificate(e2eCertificates.get(normalizeHashKey(certHashHex)) ?? null);
+    return normalizeCertificate(getE2ECertificate(certHashHex) ?? null);
   }
 
   return simulateRead(
@@ -917,6 +979,15 @@ export async function createOpportunity(
   amount: bigint,
   milestoneCount: number,
 ) {
+  if (appConfig.e2eMode) {
+    const id = String(nextE2EOpportunityId);
+    nextE2EOpportunityId += 1;
+    return {
+      hash: `e2e-create_opportunity-${employer.slice(0, 6)}`,
+      result: id,
+    };
+  }
+
   return signAndSubmit(
     employer,
     "create_opportunity",

@@ -3,12 +3,19 @@ import { expect, test } from "@playwright/test";
 test("register, verify, pay, and open the proof page", async ({ page }) => {
   await page.goto("/app");
 
-  await page.getByRole("button", { name: "Let’s go" }).click();
+  const walletIntro = page.getByRole("dialog", {
+    name: /wallet to sign/i,
+  });
+  await walletIntro
+    .getByRole("button", { name: "Let’s go" })
+    .click({ timeout: 5_000 })
+    .catch(() => undefined);
 
+  const connectButton = page.getByRole("button", { name: "Connect Freighter", exact: true }).first();
   await expect(
-    page.getByRole("button", { name: "Connect Freighter", exact: true }),
+    connectButton,
   ).toBeVisible();
-  await page.getByRole("button", { name: "Connect Freighter", exact: true }).click();
+  await connectButton.click();
 
   await expect(page.getByRole("button", { name: "Copy wallet address" })).toBeVisible();
   await expect(page.getByText("GAWI •••• •••• R34D")).toBeVisible();
@@ -53,4 +60,49 @@ test("register, verify, pay, and open the proof page", async ({ page }) => {
     "href",
     new RegExp(`candidate=${studentWallet}`),
   );
+  const candidatePassportHref = `/talent/${studentWallet}?proof=${certHash}`;
+  await expect(page.getByRole("link", { name: "View candidate passport →" })).toHaveAttribute(
+    "href",
+    candidatePassportHref,
+  );
+
+  await page.goto(candidatePassportHref);
+  await expect(page).toHaveURL(candidatePassportHref);
+  await expect(page.getByRole("heading", { name: "Candidate passport" })).toBeVisible();
+  await expect(page.getByText("Known proofs")).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Stellar Smart Contract Bootcamp Completion" }),
+  ).toHaveAttribute("href", `/proof/${certHash}`);
+  await expect(page.getByRole("link", { name: "Back to verified proof" })).toHaveAttribute(
+    "href",
+    `/proof/${certHash}`,
+  );
+
+  await page.goto(`/proof/${certHash}`);
+
+  const employerHref = `/employer?hash=${certHash}&candidate=${studentWallet}`;
+  await expect(page.getByRole("link", { name: "Fund paid trial" })).toHaveAttribute(
+    "href",
+    employerHref,
+  );
+
+  await page.goto(employerHref);
+  await expect(page).toHaveURL(
+    new RegExp(`/employer\\?hash=${certHash}&candidate=${studentWallet}`),
+  );
+  await expect(page.getByRole("heading", { name: "Review before funding" })).toBeVisible();
+  await expect(page.getByText("Verified credential loaded")).toBeVisible();
+  await expect(page.getByText("The proof-link candidate matches the credential owner.")).toBeVisible();
+  await expect(page.getByLabel("Opportunity title")).toHaveValue(
+    "Paid trial: Stellar Smart Contract Bootcamp Completion",
+  );
+  await expect(page.getByRole("button", { name: "Create opportunity" })).toBeDisabled();
+
+  await page.getByLabel("Amount (XLM)").fill("25");
+  await expect(page.getByRole("button", { name: "Create opportunity" })).toBeEnabled();
+  await page.getByRole("button", { name: "Create opportunity" }).click();
+  await expect(page.getByText("Opportunity #1 is ready to track")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Fund escrow" })).toBeEnabled();
+  await page.getByRole("button", { name: "Fund escrow" }).click();
+  await expect(page.getByRole("button", { name: "Escrow funded" })).toBeVisible();
 });

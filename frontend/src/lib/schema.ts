@@ -10,7 +10,83 @@ import {
   seoCanonicalUrl,
 } from "./seo.ts";
 
-type JsonLdObject = Record<string, unknown>;
+type JsonLdPerson = {
+  "@type": string;
+  name: string;
+  url: string;
+  sameAs?: string[];
+};
+
+type JsonLdOrganization = {
+  "@type": string;
+  name: string;
+  url: string;
+  founder: JsonLdPerson;
+};
+
+type JsonLdOffer = {
+  "@type": "Offer";
+  price: string;
+  priceCurrency: string;
+  availability: string;
+  url: string;
+};
+
+type AboutSoftwareProductSchema = {
+  "@context": "https://schema.org";
+  "@type": ["Product", "SoftwareApplication"];
+  name: string;
+  description: string;
+  url: string;
+  image: string;
+  applicationCategory: string;
+  operatingSystem: string;
+  creator: JsonLdPerson;
+  author: JsonLdPerson;
+  publisher: JsonLdOrganization;
+  offers: JsonLdOffer;
+  aggregateRating?: unknown;
+  review?: unknown;
+  reviews?: unknown;
+};
+
+type ProofDigitalDocumentSchema = {
+  "@context": "https://schema.org";
+  "@type": "DigitalDocument";
+  name: string;
+  description: string;
+  identifier: string;
+  url: string;
+  keywords?: string[];
+};
+
+type ProofArticleSchema = {
+  "@context": "https://schema.org";
+  "@type": "Article";
+  headline: string;
+  description: string;
+  mainEntityOfPage: {
+    "@type": "WebPage";
+    "@id": string;
+  };
+  image: string;
+  author: JsonLdPerson;
+  creator: JsonLdPerson;
+  publisher: JsonLdOrganization;
+  datePublished?: string;
+  dateModified?: string;
+  about: {
+    "@type": "DigitalDocument";
+    name: string;
+    identifier: string;
+    url: string;
+  };
+  mainEntity: {
+    "@type": "DigitalDocument";
+    identifier: string;
+    url: string;
+  };
+};
 
 const AUTHOR_SCHEMA = {
   "@type": "Person",
@@ -39,7 +115,7 @@ function proofDocumentFallbackDescription(cert: CertificateRecord): string {
   return `This credential is anchored on Stellar and its current status is ${cert.status}. Inspect the proof page before trusting or sharing this record.`;
 }
 
-export function buildAboutSoftwareProductSchema(): JsonLdObject {
+export function buildAboutSoftwareProductSchema(): AboutSoftwareProductSchema {
   return {
     "@context": "https://schema.org",
     "@type": ["Product", "SoftwareApplication"],
@@ -70,7 +146,7 @@ export function buildProofDigitalDocumentSchema({
   hash: string;
   cert: CertificateRecord | null;
   proofMetadata: ProofMetadata | null;
-}): JsonLdObject {
+}): ProofDigitalDocumentSchema {
   const proofUrl = seoCanonicalUrl(`/proof/${hash}`);
   const shortHash = `${hash.slice(0, 10)}...${hash.slice(-10)}`;
 
@@ -104,7 +180,7 @@ export function buildProofArticleSchema({
   hash: string;
   cert: CertificateRecord | null;
   proofMetadata: ProofMetadata | null;
-}): JsonLdObject | null {
+}): ProofArticleSchema | null {
   if (!cert) return null;
 
   const proofUrl = seoCanonicalUrl(`/proof/${hash}`);

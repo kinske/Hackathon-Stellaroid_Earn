@@ -48,6 +48,8 @@ stellar-expert-bottom.png
 stellar-expert-history.png
 proof-tech-details.png
 proof-verified-check.png
+deployment-expiration*.json
+team-expiration*.json
 *.wasm
 demo/video-frames/
 demo/seed-log.txt

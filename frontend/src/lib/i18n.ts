@@ -8,6 +8,12 @@ export type I18nDict = {
     lede: string;
     ctaPrimary: string;
     ctaGhost: string;
+    personas: Array<{
+      label: string;
+      title: string;
+      body: string;
+      cta: string;
+    }>;
   };
   footer: {
     tagline: string;
@@ -50,6 +56,26 @@ export const i18n: Record<Locale, I18nDict> = {
       lede: "Stellaroid Earn anchors certificate hashes on Stellar so employers can inspect the record and pay the graduate without leaving the workflow once an approved issuer or admin verifies it. No email thread, no invoice delay, no platform fee.",
       ctaPrimary: "Try the app →",
       ctaGhost: "See a sample proof →",
+      personas: [
+        {
+          label: "Issue",
+          title: "For bootcamps and issuers",
+          body: "Register a certificate hash, verify it with an approved wallet, and keep the proof audit-ready.",
+          cta: "Start issuing",
+        },
+        {
+          label: "Verify",
+          title: "For recruiters and reviewers",
+          body: "Paste a hash, inspect the public proof page, and download a recruiter-safe summary.",
+          cta: "Look up a proof",
+        },
+        {
+          label: "Hire",
+          title: "For employers",
+          body: "Review a verified graduate and fund a paid trial tied to the credential record.",
+          cta: "Fund a trial",
+        },
+      ],
     },
     footer: {
       tagline:
@@ -96,6 +122,26 @@ export const i18n: Record<Locale, I18nDict> = {
       lede: "I-anchor ang certificate hash sa Stellar. Kapag verified na ng approved issuer o admin, puwedeng i-check ng employer at magbayad agad — walang email thread, walang invoice delay, walang platform fee.",
       ctaPrimary: "Subukan ang app →",
       ctaGhost: "Tingnan ang sample proof →",
+      personas: [
+        {
+          label: "Issue",
+          title: "Para sa bootcamps at issuers",
+          body: "I-register ang certificate hash, i-verify gamit ang approved wallet, at panatilihing audit-ready ang proof.",
+          cta: "Mag-issue",
+        },
+        {
+          label: "Verify",
+          title: "Para sa recruiters at reviewers",
+          body: "I-paste ang hash, tingnan ang public proof page, at i-download ang recruiter-safe summary.",
+          cta: "Mag-verify",
+        },
+        {
+          label: "Hire",
+          title: "Para sa employers",
+          body: "I-review ang verified graduate at mag-fund ng paid trial na naka-link sa credential record.",
+          cta: "Mag-fund ng trial",
+        },
+      ],
     },
     footer: {
       tagline:
